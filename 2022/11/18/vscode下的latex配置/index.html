@@ -1,0 +1,694 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="张颢宇">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="下载texlive和vscode 首先下载好texlive windows版本就是texlive macos版本则为mactex   下载vscode编辑器 可以下载上中文插件 扩展下载latex workshop    安装texlive和vscode可以在csdn上面搜索相关教程，对于texlive不能科学上网的话需要镜像下载 在vscode里面配置latex相关内容 在vscode的sett">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vscode下的latex配置">
+<meta property="og:url" content="https://www.zhyblog.top/2022/11/18/vscode%E4%B8%8B%E7%9A%84latex%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="ZHY &amp; blog">
+<meta property="og:description" content="下载texlive和vscode 首先下载好texlive windows版本就是texlive macos版本则为mactex   下载vscode编辑器 可以下载上中文插件 扩展下载latex workshop    安装texlive和vscode可以在csdn上面搜索相关教程，对于texlive不能科学上网的话需要镜像下载 在vscode里面配置latex相关内容 在vscode的sett">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h89n9kavdcj30ta0m2wgo.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h8a7p7zyd1j318g0u00vy.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h89n9p4221j309q020q2q.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h89n9qtygbj30jk0lomyi.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h89n9wkcixj309q020q2q.jpg">
+<meta property="article:published_time" content="2022-11-18T14:12:58.000Z">
+<meta property="article:modified_time" content="2022-12-08T12:09:35.716Z">
+<meta property="article:author" content="张颢宇">
+<meta property="article:tag" content="latex">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h89n9kavdcj30ta0m2wgo.jpg">
+  
+  
+  
+  <title>vscode下的latex配置 - ZHY &amp; blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.zhyblog.top","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="vscode下的latex配置"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-18 22:12" pubdate>
+          2022年11月18日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          91 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">vscode下的latex配置</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="下载texlive和vscode"><a href="#下载texlive和vscode" class="headerlink" title="下载texlive和vscode"></a>下载texlive和vscode</h2><ul>
+<li>首先下载好texlive<ul>
+<li>windows版本就是texlive</li>
+<li>macos版本则为mactex</li>
+</ul>
+</li>
+<li>下载vscode编辑器<ul>
+<li>可以下载上中文插件</li>
+<li>扩展下载latex workshop</li>
+</ul>
+</li>
+</ul>
+<p>安装texlive和vscode可以在csdn上面搜索相关教程，对于texlive不能科学上网的话需要镜像下载</p>
+<h2 id="在vscode里面配置latex相关内容"><a href="#在vscode里面配置latex相关内容" class="headerlink" title="在vscode里面配置latex相关内容"></a>在vscode里面配置latex相关内容</h2><ul>
+<li>在vscode的setting json里面配置latex 位置是左上角code里面的设置，在用户拓展json里面点击<code>在setting.json中编辑</code><img src="https://tva1.sinaimg.cn/large/008vxvgGly1h89n9kavdcj30ta0m2wgo.jpg" srcset="/img/loading.gif" lazyload alt="截屏2022-11-18 21.48.02" style="zoom:50%;" /></li>
+</ul>
+<p><img src="https://tva1.sinaimg.cn/large/008vxvgGly1h8a7p7zyd1j318g0u00vy.jpg" srcset="/img/loading.gif" lazyload alt="截屏2022-11-19 10.08.23"></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;latex-workshop.latex.tools&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>	<br>    <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;pdflatex&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;command&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;pdflatex&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>            <span class="hljs-string">&quot;-synctex=1&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-string">&quot;-interaction=nonstopmode&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-string">&quot;-file-line-error&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-string">&quot;%DOCFILE%&quot;</span><br>        <span class="hljs-punctuation">]</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;xelatex&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;command&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;xelatex&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>            <span class="hljs-string">&quot;-synctex=1&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-string">&quot;-interaction=nonstopmode&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-string">&quot;-file-line-error&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-string">&quot;%DOCFILE%&quot;</span><br>        <span class="hljs-punctuation">]</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;bibtex&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;command&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;bibtex&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>            <span class="hljs-string">&quot;%DOCFILE%&quot;</span><br>        <span class="hljs-punctuation">]</span><br>    <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;latex-workshop.latex.recipes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>    <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;xelatex&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;tools&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>            <span class="hljs-string">&quot;xelatex&quot;</span><br>        <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;pdflatex&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;tools&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>            <span class="hljs-string">&quot;pdflatex&quot;</span><br>        <span class="hljs-punctuation">]</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;xe-&gt;bib-&gt;xe-&gt;xe&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;tools&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>            <span class="hljs-string">&quot;xelatex&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-string">&quot;bibtex&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-string">&quot;xelatex&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-string">&quot;xelatex&quot;</span><br>        <span class="hljs-punctuation">]</span><br>    <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;pdf-&gt;bib-&gt;pdf-&gt;pdf&quot;</span><span class="hljs-punctuation">,</span><br>        <span class="hljs-attr">&quot;tools&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>            <span class="hljs-string">&quot;pdflatex&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-string">&quot;bibtex&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-string">&quot;pdflatex&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-string">&quot;pdflatex&quot;</span><br>        <span class="hljs-punctuation">]</span><br>    <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;latex-workshop.latex.clean.fileTypes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>    <span class="hljs-string">&quot;*.aux&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.bbl&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.blg&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.idx&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.ind&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.lof&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.lot&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.out&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.toc&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.acn&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.acr&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.alg&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.glg&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.glo&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.gls&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.ist&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.fls&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.log&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;*.fdb_latexmk&quot;</span><br><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br><span class="hljs-comment">//tex文件浏览器，可选项为&quot;none&quot; &quot;browser&quot; &quot;tab&quot; &quot;external&quot;</span><br><span class="hljs-attr">&quot;latex-workshop.view.pdf.viewer&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;tab&quot;</span><span class="hljs-punctuation">,</span><br><span class="hljs-comment">//自动编译tex文件</span><br><span class="hljs-attr">&quot;latex-workshop.latex.autoBuild.run&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;onFileChange&quot;</span><span class="hljs-punctuation">,</span><br><span class="hljs-comment">//显示内容菜单：（1）编译文件；（2）定位游标</span><br><span class="hljs-attr">&quot;latex-workshop.showContextMenu&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br><span class="hljs-comment">//显示错误</span><br><span class="hljs-attr">&quot;latex-workshop.message.error.show&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span><br><span class="hljs-comment">//显示警告</span><br><span class="hljs-attr">&quot;latex-workshop.message.warning.show&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span><br><span class="hljs-comment">//从使用的包中自动补全命令和环境</span><br><span class="hljs-attr">&quot;latex-workshop.intellisense.package.enabled&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br><span class="hljs-comment">//设置为never，为不清除辅助文件</span><br><span class="hljs-attr">&quot;latex-workshop.latex.autoClean.run&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;never&quot;</span><span class="hljs-punctuation">,</span><br><span class="hljs-comment">//设置vscode编译tex文档时的默认编译链</span><br><span class="hljs-attr">&quot;latex-workshop.latex.recipe.default&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;lastUsed&quot;</span><span class="hljs-punctuation">,</span><br><span class="hljs-comment">// 用于反向同步的内部查看器的键绑定。ctrl/cmd +点击(默认)或双击</span><br><span class="hljs-attr">&quot;latex-workshop.view.pdf.internal.synctex.keybinding&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;double-click&quot;</span><span class="hljs-punctuation">,</span><br><br></code></pre></td></tr></table></figure>
+
+<p>配置上述代码</p>
+<p><strong>必须在写在<code>&#123;&#125;</code>里面，如果<code>&#123;&#125;</code>里面有内容，你就需要在最后一个代码后面加上<code>,</code>，然后在下面配置上述代码，注意缩进</strong></p>
+<h2 id="在vscode编写latex格式的文件并进行预览"><a href="#在vscode编写latex格式的文件并进行预览" class="headerlink" title="在vscode编写latex格式的文件并进行预览"></a>在vscode编写latex格式的文件并进行预览</h2><ul>
+<li>然后保存这个修改后的文件，重新打开vscode</li>
+<li>在工作区新建一个文件夹，在文件夹里面新建一个后缀为<code>tex</code>的文件</li>
+<li>在里面加入这个模版</li>
+</ul>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br></pre></td><td class="code"><pre><code class="hljs latex"><span class="hljs-comment">% -*- coding: utf-8 -*-</span><br><span class="hljs-keyword">\documentclass</span>&#123;article&#125;<br><span class="hljs-keyword">\usepackage</span>&#123;listings&#125;<br><span class="hljs-keyword">\usepackage</span>&#123;ctex&#125;<br><span class="hljs-keyword">\usepackage</span>&#123;graphicx&#125;<br><span class="hljs-keyword">\usepackage</span>[a4paper, body=&#123;18cm,22cm&#125;]&#123;geometry&#125;<br><span class="hljs-keyword">\usepackage</span>&#123;amsmath,amssymb,amstext,wasysym,enumerate,graphicx&#125;<br><span class="hljs-keyword">\usepackage</span>&#123;float,abstract,booktabs,indentfirst,amsmath&#125;<br><span class="hljs-keyword">\usepackage</span>&#123;array&#125;<br><span class="hljs-keyword">\usepackage</span>&#123;booktabs&#125; <span class="hljs-comment">%调整表格线与上下内容的间隔</span><br><span class="hljs-keyword">\usepackage</span>&#123;multirow&#125;<br><span class="hljs-keyword">\usepackage</span>&#123;diagbox&#125;<br><span class="hljs-keyword">\renewcommand</span><span class="hljs-keyword">\arraystretch</span>&#123;1.4&#125;<br><span class="hljs-keyword">\usepackage</span>&#123;indentfirst&#125;<br><span class="hljs-keyword">\setlength</span>&#123;<span class="hljs-keyword">\parindent</span>&#125;&#123;2em&#125;<br> <br><span class="hljs-keyword">\geometry</span>&#123;left=2.8cm,right=2.2cm,top=2.5cm,bottom=2.5cm&#125;<br><span class="hljs-comment">%\geometry&#123;left=3.18cm,right=3.18cm,top=2.54cm,bottom=2.54cm&#125;</span><br> <br><span class="hljs-keyword">\graphicspath</span>&#123;&#123;figures/&#125;&#125;<br> <br><span class="hljs-keyword">\title</span>&#123;<span class="hljs-keyword">\heiti</span> 题目 &#125;<br> <br><span class="hljs-keyword">\begin</span>&#123;document&#125;<br> <br>    <span class="hljs-keyword">\maketitle</span><br>    <br>    <span class="hljs-keyword">\vspace</span>&#123;5cm&#125;<br>    <br>    <span class="hljs-keyword">\begin</span>&#123;table&#125;[h]<br>        <span class="hljs-keyword">\centering</span><br>        <span class="hljs-keyword">\begin</span>&#123;Large&#125;<br>            <span class="hljs-keyword">\begin</span>&#123;tabular&#125;&#123;p&#123;3cm&#125; p&#123;7cm&#125;&lt;&#123;<span class="hljs-keyword">\centering</span>&#125;&#125;<br>                学  <span class="hljs-keyword">\qquad</span>  校: <span class="hljs-built_in">&amp;</span>  *********     <span class="hljs-keyword">\\</span> <span class="hljs-keyword">\cline</span>&#123;2-2&#125;<br>                学 <span class="hljs-keyword">\qquad</span> 院:      <span class="hljs-built_in">&amp;</span> ****学院   <span class="hljs-keyword">\\</span> <span class="hljs-keyword">\cline</span>&#123;2-2&#125;<br>                成  <span class="hljs-keyword">\qquad</span>  员: <span class="hljs-built_in">&amp;</span> *** <span class="hljs-keyword">\quad</span> ** <span class="hljs-keyword">\quad</span> *** <span class="hljs-keyword">\\</span> <span class="hljs-keyword">\cline</span>&#123;2-2&#125;<br>                <span class="hljs-built_in">&amp;</span> **<span class="hljs-keyword">\quad</span> ** <span class="hljs-keyword">\quad</span> *** <span class="hljs-keyword">\\</span> <span class="hljs-keyword">\cline</span>&#123;2-2&#125;<br>                指导教师:       <span class="hljs-built_in">&amp;</span> **** <span class="hljs-keyword">\\</span> <span class="hljs-keyword">\cline</span>&#123;2-2&#125;<br>            <span class="hljs-keyword">\end</span>&#123;tabular&#125;<br>        <span class="hljs-keyword">\end</span>&#123;Large&#125;     <br>    <span class="hljs-keyword">\end</span>&#123;table&#125;<br>    <br>    <span class="hljs-keyword">\newpage</span><br> <br>    <span class="hljs-keyword">\tableofcontents</span><br>    <br>    <span class="hljs-keyword">\newpage</span><br>    <br>    <span class="hljs-keyword">\section</span>&#123;系统概述&#125;<br>    <br>    <br> <br><span class="hljs-keyword">\end</span>&#123;document&#125;<br> <br><span class="hljs-comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%Library%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span><br> <br><span class="hljs-comment">% 1. 脚注用法</span><br>    LaTeX<span class="hljs-keyword">\footnote</span>&#123;Latex is Latex&#125; is a good software<br> <br><span class="hljs-comment">%2. 强调</span><br>    <span class="hljs-keyword">\emph</span>&#123;center of percussion&#125; <span class="hljs-comment">%[Brody 1986], %\lipsum[5]</span><br> <br><span class="hljs-comment">%3. 随便生成一段话</span><br>    <span class="hljs-keyword">\lipsum</span>[4]<br> <br><span class="hljs-comment">%4. 列条目</span><br>    <span class="hljs-keyword">\begin</span>&#123;itemize&#125;<br>    <span class="hljs-keyword">\item</span> the angular velocity of the bat,<br>    <span class="hljs-keyword">\item</span> the velocity of the ball, and<br>    <span class="hljs-keyword">\item</span> the position of impact along the bat.<br>    <span class="hljs-keyword">\end</span>&#123;itemize&#125;<br> <br><span class="hljs-comment">%5. 表格用法</span><br>    <span class="hljs-keyword">\begin</span>&#123;table&#125;[h]<br>    <span class="hljs-keyword">\centering</span>  <br>    <span class="hljs-keyword">\begin</span>&#123;tabular&#125;&#123;c|cc&#125;<br>        <span class="hljs-keyword">\hline</span><br>        年份 <span class="hljs-built_in">&amp;</span> <span class="hljs-keyword">\multicolumn</span>&#123;2&#125;&#123;c&#125;&#123;指标&#125;<span class="hljs-keyword">\\</span><br>        <span class="hljs-keyword">\hline</span><br>        2017 <span class="hljs-built_in">&amp;</span> 0.9997 <span class="hljs-built_in">&amp;</span> 0.0555 <span class="hljs-keyword">\\</span><br>        2018 <span class="hljs-built_in">&amp;</span> 0.9994 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-keyword">\\</span><br>        2019 <span class="hljs-built_in">&amp;</span> 0.9993 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-keyword">\\</span><br>        <span class="hljs-keyword">\hline</span><br>    <span class="hljs-keyword">\end</span>&#123;tabular&#125;<br>    <span class="hljs-keyword">\caption</span>&#123;NAME&#125;<span class="hljs-keyword">\label</span>&#123;SIGN&#125;<br>    <span class="hljs-keyword">\end</span>&#123;table&#125;<br>    <span class="hljs-keyword">\begin</span>&#123;center&#125;<br>        <span class="hljs-keyword">\begin</span>&#123;tabular&#125;&#123;c|cclcrcc&#125;<br>            <span class="hljs-keyword">\hline</span><br>            Year <span class="hljs-built_in">&amp;</span> theta <span class="hljs-built_in">&amp;</span> <span class="hljs-built_in">$</span>S<span class="hljs-built_in">_</span>1<span class="hljs-built_in">^</span>-<span class="hljs-built_in">$</span> <span class="hljs-built_in">&amp;</span> <span class="hljs-built_in">$</span>S<span class="hljs-built_in">_</span>2<span class="hljs-built_in">^</span>-<span class="hljs-built_in">$</span> <span class="hljs-built_in">&amp;</span> <span class="hljs-built_in">$</span>S<span class="hljs-built_in">_</span>3<span class="hljs-built_in">^</span>-<span class="hljs-built_in">$</span> <span class="hljs-built_in">&amp;</span> <span class="hljs-built_in">$</span>S<span class="hljs-built_in">_</span>4<span class="hljs-built_in">^</span>+<span class="hljs-built_in">$</span> <span class="hljs-built_in">&amp;</span> <span class="hljs-built_in">$</span>S<span class="hljs-built_in">_</span>5<span class="hljs-built_in">^</span>+<span class="hljs-built_in">$</span> <span class="hljs-built_in">&amp;</span> <span class="hljs-built_in">$</span>S<span class="hljs-built_in">_</span>6<span class="hljs-built_in">^</span>+<span class="hljs-built_in">$</span> <span class="hljs-keyword">\\</span><span class="hljs-comment">%表格标题</span><br>            <span class="hljs-keyword">\hline</span><br>            2016 <span class="hljs-built_in">&amp;</span> 1      <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-built_in">&amp;</span> 0.0001 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>            2017 <span class="hljs-built_in">&amp;</span> 0.9997 <span class="hljs-built_in">&amp;</span> 0.0555 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-built_in">&amp;</span> 0.2889 <span class="hljs-built_in">&amp;</span> 0.1844 <span class="hljs-built_in">&amp;</span> 0.463  <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>            2018 <span class="hljs-built_in">&amp;</span> 0.9994 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-built_in">&amp;</span> 0.0012 <span class="hljs-built_in">&amp;</span> 0.3269 <span class="hljs-built_in">&amp;</span> 0.7154 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>            2019 <span class="hljs-built_in">&amp;</span> 0.9993 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0.4325 <span class="hljs-built_in">&amp;</span> 1.0473 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>            2020 <span class="hljs-built_in">&amp;</span> 0.9991 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0.5046 <span class="hljs-built_in">&amp;</span> 1.2022 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>            2021 <span class="hljs-built_in">&amp;</span> 0.999  <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0.5466 <span class="hljs-built_in">&amp;</span> 1.2827 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>            2022 <span class="hljs-built_in">&amp;</span> 0.9989 <span class="hljs-built_in">&amp;</span> 0.0017 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-built_in">&amp;</span> 0.3159 <span class="hljs-built_in">&amp;</span> 0.562  <span class="hljs-built_in">&amp;</span> 1.2995 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>            2023 <span class="hljs-built_in">&amp;</span> 0.9989 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-built_in">&amp;</span> 0.0109 <span class="hljs-built_in">&amp;</span> 0.5533 <span class="hljs-built_in">&amp;</span> 1.2616 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>            2024 <span class="hljs-built_in">&amp;</span> 0.9989 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0.5232 <span class="hljs-built_in">&amp;</span> 1.1769 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>            2025 <span class="hljs-built_in">&amp;</span> 0.9989 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-built_in">&amp;</span> 0.1009 <span class="hljs-built_in">&amp;</span> 0.4738 <span class="hljs-built_in">&amp;</span> 1.0521 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>            2026 <span class="hljs-built_in">&amp;</span> 0.9991 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0.4071 <span class="hljs-built_in">&amp;</span> 0.8929 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>            2027 <span class="hljs-built_in">&amp;</span> 0.9992 <span class="hljs-built_in">&amp;</span> 0.0004 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-built_in">&amp;</span> 0.1195 <span class="hljs-built_in">&amp;</span> 0.3248 <span class="hljs-built_in">&amp;</span> 0.7042 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>            2028 <span class="hljs-built_in">&amp;</span> 0.9994 <span class="hljs-built_in">&amp;</span> 0.0164 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-built_in">&amp;</span> 0.046  <span class="hljs-built_in">&amp;</span> 0.2287 <span class="hljs-built_in">&amp;</span> 0.4902 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>            2029 <span class="hljs-built_in">&amp;</span> 0.9997 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-built_in">&amp;</span> 0.0609 <span class="hljs-built_in">&amp;</span> 0.12   <span class="hljs-built_in">&amp;</span> 0.2545 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>            2030 <span class="hljs-built_in">&amp;</span> 1      <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>            <span class="hljs-keyword">\hline</span><br>        <span class="hljs-keyword">\end</span>&#123;tabular&#125;<br>    <span class="hljs-keyword">\end</span>&#123;center&#125;<br> <br><span class="hljs-comment">%6. 数学公式</span><br>    <span class="hljs-keyword">\begin</span>&#123;equation&#125;<br>        a<span class="hljs-built_in">^</span>2 = a * a<span class="hljs-keyword">\label</span>&#123;aa&#125;<br>    <span class="hljs-keyword">\end</span>&#123;equation&#125;<br>    <br>    <span class="hljs-keyword">\[</span><br>    <span class="hljs-keyword">\begin</span>&#123;pmatrix&#125;&#123;*&#123;20&#125;c&#125;<br>    &#123;a<span class="hljs-built_in">_</span>&#123;11&#125; &#125; <span class="hljs-built_in">&amp;</span> &#123;a<span class="hljs-built_in">_</span>&#123;12&#125; &#125; <span class="hljs-built_in">&amp;</span> &#123;a<span class="hljs-built_in">_</span>&#123;13&#125; &#125;  <span class="hljs-keyword">\\</span><br>    &#123;a<span class="hljs-built_in">_</span>&#123;21&#125; &#125; <span class="hljs-built_in">&amp;</span> &#123;a<span class="hljs-built_in">_</span>&#123;22&#125; &#125; <span class="hljs-built_in">&amp;</span> &#123;a<span class="hljs-built_in">_</span>&#123;23&#125; &#125;  <span class="hljs-keyword">\\</span><br>    &#123;a<span class="hljs-built_in">_</span>&#123;31&#125; &#125; <span class="hljs-built_in">&amp;</span> &#123;a<span class="hljs-built_in">_</span>&#123;32&#125; &#125; <span class="hljs-built_in">&amp;</span> &#123;a<span class="hljs-built_in">_</span>&#123;33&#125; &#125;  <span class="hljs-keyword">\\</span><br>    <span class="hljs-keyword">\end</span>&#123;pmatrix&#125;<br>    = <span class="hljs-keyword">\frac</span>&#123;&#123;Opposite&#125;&#125;&#123;&#123;Hypotenuse&#125;&#125;<span class="hljs-keyword">\cos</span> <span class="hljs-built_in">^</span>&#123; - 1&#125; <span class="hljs-keyword">\theta</span> <span class="hljs-keyword">\arcsin</span> <span class="hljs-keyword">\theta</span><br>    <span class="hljs-keyword">\]</span><br>    <br>    <span class="hljs-keyword">\[</span><br>    p<span class="hljs-built_in">_</span>&#123;j&#125;=<span class="hljs-keyword">\begin</span>&#123;cases&#125; 0,<span class="hljs-built_in">&amp;</span><span class="hljs-keyword">\text</span>&#123;if <span class="hljs-built_in">$</span>j<span class="hljs-built_in">$</span> is odd&#125;<span class="hljs-keyword">\\</span><br>    r!<span class="hljs-keyword">\,</span>(-1)<span class="hljs-built_in">^</span>&#123;j/2&#125;,<span class="hljs-built_in">&amp;</span><span class="hljs-keyword">\text</span>&#123;if <span class="hljs-built_in">$</span>j<span class="hljs-built_in">$</span> is even&#125;<br>    <span class="hljs-keyword">\end</span>&#123;cases&#125;<br>    <span class="hljs-keyword">\]</span><br>    <br>    <br>    <span class="hljs-keyword">\[</span><br>    <span class="hljs-keyword">\arcsin</span> <span class="hljs-keyword">\theta</span>  =<br>    <span class="hljs-keyword">\mathop</span>&#123;&#123;<span class="hljs-keyword">\int</span><span class="hljs-keyword">\!</span><span class="hljs-keyword">\!</span><span class="hljs-keyword">\!</span><span class="hljs-keyword">\!</span><span class="hljs-keyword">\!</span><span class="hljs-keyword">\int</span><span class="hljs-keyword">\!</span><span class="hljs-keyword">\!</span><span class="hljs-keyword">\!</span><span class="hljs-keyword">\!</span><span class="hljs-keyword">\!</span><span class="hljs-keyword">\int</span>&#125;<span class="hljs-keyword">\mkern</span>-31.2mu<br>        <span class="hljs-keyword">\bigodot</span>&#125;<span class="hljs-keyword">\limits</span><span class="hljs-built_in">_</span><span class="hljs-keyword">\varphi</span><br>    &#123;<span class="hljs-keyword">\mathop</span> &#123;<span class="hljs-keyword">\lim</span> &#125;<span class="hljs-keyword">\limits</span><span class="hljs-built_in">_</span>&#123;x <span class="hljs-keyword">\to</span> <span class="hljs-keyword">\infty</span> &#125; <span class="hljs-keyword">\frac</span>&#123;&#123;n!&#125;&#125;&#123;&#123;r!<span class="hljs-keyword">\left</span>( &#123;n - r&#125;<br>                <span class="hljs-keyword">\right</span>)!&#125;&#125;&#125; <span class="hljs-keyword">\eqno</span> (1)<br>    <span class="hljs-keyword">\]</span><br> <br><span class="hljs-comment">%7. 双图并行</span><br>    <span class="hljs-keyword">\begin</span>&#123;figure&#125;[h]<br>        <span class="hljs-comment">% 一个2*2图片的排列</span><br>        <span class="hljs-keyword">\begin</span>&#123;minipage&#125;[h]&#123;0.5<span class="hljs-keyword">\linewidth</span>&#125;<br>            <span class="hljs-keyword">\centering</span><br>            <span class="hljs-keyword">\includegraphics</span>[width=0.8<span class="hljs-keyword">\textwidth</span>]&#123;./figures/0.jpg&#125;<br>            <span class="hljs-keyword">\caption</span>&#123;Figure example 2&#125;<br>        <span class="hljs-keyword">\end</span>&#123;minipage&#125;<br>        <span class="hljs-keyword">\begin</span>&#123;minipage&#125;[h]&#123;0.5<span class="hljs-keyword">\linewidth</span>&#125;<br>            <span class="hljs-keyword">\centering</span><br>            <span class="hljs-keyword">\includegraphics</span>[width=0.8<span class="hljs-keyword">\textwidth</span>]&#123;./figures/0.jpg&#125;<br>            <span class="hljs-keyword">\caption</span>&#123;Figure example 3&#125;<br>        <span class="hljs-keyword">\end</span>&#123;minipage&#125;<br>    <span class="hljs-keyword">\end</span>&#123;figure&#125;<br> <br><span class="hljs-comment">%8. 单张图片部分</span><br>    <span class="hljs-keyword">\begin</span>&#123;figure&#125;[h]<br>        <span class="hljs-comment">%\small</span><br>        <span class="hljs-keyword">\centering</span><br>        <span class="hljs-keyword">\includegraphics</span>[width=12cm]&#123;./figures/mcmthesis-aaa.eps&#125;<br>        <span class="hljs-keyword">\caption</span>&#123;Figure example 1&#125; <span class="hljs-keyword">\label</span>&#123;fig:aa&#125;<br>    <span class="hljs-keyword">\end</span>&#123;figure&#125;<br> <br><span class="hljs-comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span><br><span class="hljs-keyword">\begin</span>&#123;minipage&#125;&#123;0.5<span class="hljs-keyword">\linewidth</span>&#125;<br>    <span class="hljs-keyword">\begin</span>&#123;tabular&#125;&#123;|c|c|c|&#125;<br>        <span class="hljs-keyword">\hline</span><br>        <span class="hljs-keyword">\multicolumn</span>&#123;2&#125;&#123;|c|&#125;&#123;<span class="hljs-keyword">\multirow</span>&#123;2&#125;&#123;*&#125;&#123;合并&#125;&#125;<span class="hljs-built_in">&amp;</span>测试<span class="hljs-keyword">\\</span><br>        <span class="hljs-keyword">\cline</span>&#123;3-3&#125;<br>        <span class="hljs-keyword">\multicolumn</span>&#123;2&#125;&#123;|c|&#125;&#123;&#125;<span class="hljs-built_in">&amp;</span> 0.9997  <span class="hljs-keyword">\\</span><br>        <span class="hljs-keyword">\hline</span><br>        2019 <span class="hljs-built_in">&amp;</span> 0.9993 <span class="hljs-built_in">&amp;</span> 0 <span class="hljs-keyword">\\</span><br>        <span class="hljs-keyword">\hline</span><br>    <span class="hljs-keyword">\end</span>&#123;tabular&#125;<br><span class="hljs-keyword">\end</span>&#123;minipage&#125;<br><span class="hljs-keyword">\begin</span>&#123;minipage&#125;&#123;0.5<span class="hljs-keyword">\linewidth</span>&#125;<br>    <span class="hljs-keyword">\begin</span>&#123;tabular&#125;&#123;c|ccc&#125;<br>        <span class="hljs-keyword">\hline</span><br>        年份 <span class="hljs-built_in">&amp;</span> <span class="hljs-keyword">\multicolumn</span>&#123;3&#125;&#123;c&#125;&#123;指标&#125;<span class="hljs-keyword">\\</span><br>        <span class="hljs-keyword">\hline</span><br>        <span class="hljs-keyword">\multirow</span>&#123;3&#125;&#123;*&#125;&#123;合并&#125;<span class="hljs-built_in">&amp;</span>2017 <span class="hljs-built_in">&amp;</span> 0.9997 <span class="hljs-built_in">&amp;</span> 0.0555 <span class="hljs-keyword">\\</span><br>        <span class="hljs-built_in">&amp;</span>2018 <span class="hljs-built_in">&amp;</span> 0.9994 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-keyword">\\</span><br>        <span class="hljs-built_in">&amp;</span>2019 <span class="hljs-built_in">&amp;</span> 0.9993 <span class="hljs-built_in">&amp;</span> 0      <span class="hljs-keyword">\\</span><br>        <span class="hljs-keyword">\hline</span><br>    <span class="hljs-keyword">\end</span>&#123;tabular&#125;<br><span class="hljs-keyword">\end</span>&#123;minipage&#125;<br>    <span class="hljs-keyword">\begin</span>&#123;table&#125;[h]<br>    <span class="hljs-keyword">\centering</span>  <br>    <span class="hljs-keyword">\begin</span>&#123;Large&#125;<br>        <span class="hljs-keyword">\begin</span>&#123;tabular&#125;&#123;p&#123;4cm&#125; p&#123;8cm&#125; &lt; &#123;<span class="hljs-keyword">\centering</span>&#125;&#125;<br>            <span class="hljs-keyword">\hline</span><br>            院<span class="hljs-keyword">\qquad</span> 系: <span class="hljs-built_in">&amp;</span> 信息工程学院 <span class="hljs-keyword">\\</span><br>            <span class="hljs-keyword">\hline</span><br>            团队名称: <span class="hljs-built_in">&amp;</span> PlantBook Team <span class="hljs-keyword">\\</span><br>            <span class="hljs-keyword">\hline</span><br>            分<span class="hljs-keyword">\qquad</span> 组: <span class="hljs-built_in">&amp;</span> 第0组1号 <span class="hljs-keyword">\\</span><br>            <span class="hljs-keyword">\hline</span><br>            日<span class="hljs-keyword">\qquad</span> 期: <span class="hljs-built_in">&amp;</span> 2017年10月28日 <span class="hljs-keyword">\\</span><br>            <span class="hljs-keyword">\hline</span><br>            指导教师: <span class="hljs-built_in">&amp;</span> 吱吱吱<span class="hljs-keyword">\\</span><br>            <span class="hljs-keyword">\hline</span><br>        <span class="hljs-keyword">\end</span>&#123;tabular&#125;<br>    <span class="hljs-keyword">\end</span>&#123;Large&#125;<br><span class="hljs-keyword">\end</span>&#123;table&#125;<br><span class="hljs-keyword">\ctexset</span>&#123;<br>    section=&#123;<br>        format+=<span class="hljs-keyword">\heiti</span> <span class="hljs-keyword">\raggedright</span>,<br>        name=&#123;,、&#125;,<br>        number=<span class="hljs-keyword">\chinese</span>&#123;section&#125;,<br>        beforeskip=1.0ex plus 0.2ex minus .2ex,<br>        afterskip=1.0ex plus 0.2ex minus .2ex,<br>        aftername=<span class="hljs-keyword">\hspace</span>&#123;0pt&#125;<br>    &#125;,<br>&#125;<br>    <span class="hljs-keyword">\begin</span>&#123;table&#125;[h]<br>    <span class="hljs-keyword">\centering</span><br>    <span class="hljs-keyword">\begin</span>&#123;Large&#125;<br>        <span class="hljs-keyword">\begin</span>&#123;tabular&#125;&#123;p&#123;3cm&#125; p&#123;7cm&#125;&lt;&#123;<span class="hljs-keyword">\centering</span>&#125;&#125;<br>            院  <span class="hljs-keyword">\qquad</span>  系: <span class="hljs-built_in">&amp;</span> 信息工程学院           <span class="hljs-keyword">\\</span> <span class="hljs-keyword">\cline</span>&#123;2-2&#125;<br>        <span class="hljs-keyword">\end</span>&#123;tabular&#125;<br>    <span class="hljs-keyword">\end</span>&#123;Large&#125;     <br><span class="hljs-keyword">\end</span>&#123;table&#125;<br><span class="hljs-keyword">\thispagestyle</span>&#123;empty&#125;<br><span class="hljs-keyword">\newpage</span><br><span class="hljs-keyword">\thispagestyle</span>&#123;empty&#125;<br><span class="hljs-keyword">\tableofcontents</span><br><span class="hljs-keyword">\thispagestyle</span>&#123;empty&#125;<br><span class="hljs-keyword">\newpage</span><br><span class="hljs-keyword">\setcounter</span>&#123;page&#125;&#123;1&#125;<br><span class="hljs-comment">% 9. 代码</span><br> <br><span class="hljs-keyword">\usepackage</span>&#123;listings&#125;<br><span class="hljs-keyword">\usepackage</span>&#123;xcolor&#125;<br><span class="hljs-keyword">\lstset</span>&#123;<br>    numbers=left, <br>    numberstyle= <span class="hljs-keyword">\tiny</span>, <br>    keywordstyle= <span class="hljs-keyword">\color</span>&#123; blue!70&#125;,<br>    commentstyle= <span class="hljs-keyword">\color</span>&#123;red!50!green!50!blue!50&#125;, <br>    frame=shadowbox, <span class="hljs-comment">% 阴影效果</span><br>    rulesepcolor= <span class="hljs-keyword">\color</span>&#123; red!20!green!20!blue!20&#125; ,<br>    escapeinside=``, <span class="hljs-comment">% 英文分号中可写入中文</span><br>    xleftmargin=2em,xrightmargin=2em, aboveskip=1em,<br>    basicstyle=<span class="hljs-keyword">\footnotesize</span>,<br>    framexleftmargin=2em<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>注意一定要保存。每次进行修改后也一定要保存、才能显示修改后的内容</strong></p>
+</li>
+<li><p>之后在右上角找到如下的图标， 点击第二个三角形运行</p>
+</li>
+<li><p><img src="https://tva1.sinaimg.cn/large/008vxvgGly1h89n9p4221j309q020q2q.jpg" srcset="/img/loading.gif" lazyload alt="截屏2022-11-18 21.59.15"></p>
+</li>
+<li><p>如果没有就鼠标右键选择<code>build latex project</code></p>
+</li>
+<li><img src="https://tva1.sinaimg.cn/large/008vxvgGly1h89n9qtygbj30jk0lomyi.jpg" srcset="/img/loading.gif" lazyload alt="截屏2022-11-18 22.01.50" style="zoom:50%;" />
+</li>
+<li><p>然后点击第三个如下第三个图标进行预览或者直接在工作区里面选择pdf文件进行浏览<img src="https://tva1.sinaimg.cn/large/008vxvgGly1h89n9wkcixj309q020q2q.jpg" srcset="/img/loading.gif" lazyload alt="截屏2022-11-18 21.59.15"></p>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/latex/" class="category-chain-item">latex</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/latex/">#latex</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>vscode下的latex配置</div>
+      <div>https://www.zhyblog.top/2022/11/18/vscode下的latex配置/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>张颢宇</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/22/Git%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/" title="Git基础操作">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Git基础操作</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/17/C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%93%BE%E8%A1%A8/" title="C数据结构--链表">
+                        <span class="hidden-mobile">C数据结构--链表</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,752 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="张颢宇">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="rune在go中rune的源码定义为： 1type rune &#x3D; int32  rune在本质上就是int32类型，占有四个字节，用来表示一个Unicode字符（码点） byte同样的，直接上源码： 1type byte &#x3D; uint8  其在本质上就是uint8类型，表示1个字节，用来表示ASCII表中的一个字符 string原生优点go内置的字符串类型是原生的，优点如下：  数据不可变，提高了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go数据类型回顾(二)--byte、rune、字符串">
+<meta property="og:url" content="https://www.zhyblog.top/2022/12/04/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B-byte%E3%80%81rune%E3%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
+<meta property="og:site_name" content="ZHY &amp; blog">
+<meta property="og:description" content="rune在go中rune的源码定义为： 1type rune &#x3D; int32  rune在本质上就是int32类型，占有四个字节，用来表示一个Unicode字符（码点） byte同样的，直接上源码： 1type byte &#x3D; uint8  其在本质上就是uint8类型，表示1个字节，用来表示ASCII表中的一个字符 string原生优点go内置的字符串类型是原生的，优点如下：  数据不可变，提高了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h8s5cxi3p1j31d60mrq3m.jpg">
+<meta property="article:published_time" content="2022-12-04T03:29:40.000Z">
+<meta property="article:modified_time" content="2022-12-05T03:40:00.438Z">
+<meta property="article:author" content="张颢宇">
+<meta property="article:tag" content="go数据类型">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h8s5cxi3p1j31d60mrq3m.jpg">
+  
+  
+  
+  <title>go数据类型回顾(二)--byte、rune、字符串 - ZHY &amp; blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.zhyblog.top","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="go数据类型回顾(二)--byte、rune、字符串"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-12-04 11:29" pubdate>
+          2022年12月4日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">go数据类型回顾(二)--byte、rune、字符串</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="rune"><a href="#rune" class="headerlink" title="rune"></a><code>rune</code></h1><p>在go中<code>rune</code>的源码定义为：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> <span class="hljs-type">rune</span> = <span class="hljs-type">int32</span><br></code></pre></td></tr></table></figure>
+
+<p><code>rune</code>在本质上就是<code>int32</code>类型，占有四个字节，用来<strong>表示一个Unicode字符（码点）</strong></p>
+<h1 id="byte"><a href="#byte" class="headerlink" title="byte"></a><code>byte</code></h1><p>同样的，直接上源码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> <span class="hljs-type">byte</span> = <span class="hljs-type">uint8</span><br></code></pre></td></tr></table></figure>
+
+<p>其在本质上就是<code>uint8</code>类型，表示1个字节，<strong>用来表示ASCII表中的一个字符</strong></p>
+<h1 id="string"><a href="#string" class="headerlink" title="string"></a><code>string</code></h1><h2 id="原生优点"><a href="#原生优点" class="headerlink" title="原生优点"></a>原生优点</h2><p>go内置的字符串类型是原生的，优点如下：</p>
+<ul>
+<li>数据不可变，提高了并发安全性和存储利用率</li>
+<li>获取长度的时间复杂度是常数</li>
+<li>所见即所得</li>
+<li>对非ASCII码提供了原生支持，消除了源码在不同环境下显示乱码的可能（<strong>go采用Unicode字符集，以UTF-8编码格式存储在内存中</strong>）</li>
+</ul>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p><strong>字符串未赋值时默认为空字符。</strong></p>
+<p>在go中，对于字符串的组成，有两种看法，一种就是从<strong>字节</strong>的角度，另一种就是从<strong>字符</strong>的角度。</p>
+<p>从字节角度上：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span><br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	<span class="hljs-keyword">var</span> s = <span class="hljs-string">&quot;中国人&quot;</span><br>	fmt.Printf(<span class="hljs-string">&quot;The length of s = %d\n&quot;</span>, <span class="hljs-built_in">len</span>(s))		<span class="hljs-comment">// 对应9个字符</span><br><br>	<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">len</span>(s); i++ &#123;<br>		fmt.Printf(<span class="hljs-string">&quot;0x%x &quot;</span>, s[i])					<span class="hljs-comment">// 0xe4 0xb8 0xad 0xe5 0x9b 0xbd 0xe4 0xba 0xba</span><br>	&#125;<br>	fmt.Printf(<span class="hljs-string">&quot;\n&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>从字符角度上：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;unicode/utf8&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	<span class="hljs-keyword">var</span> s = <span class="hljs-string">&quot;中国人&quot;</span><br>	fmt.Printf(<span class="hljs-string">&quot;The length of s = %d\n&quot;</span>, utf8.RuneCountInString(s))			<span class="hljs-comment">// 对应3个字符（也就是3个Unicode字符）</span><br><br>	<span class="hljs-keyword">for</span> _, i := <span class="hljs-keyword">range</span> s &#123;<br>		fmt.Printf(<span class="hljs-string">&quot;0x%x &quot;</span>, i)			<span class="hljs-comment">// 0x4e2d 0x56fd 0x4eba</span><br>	&#125;<br>	fmt.Printf(<span class="hljs-string">&quot;\n&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>一个Unicode码点就会对应一个Unicode字符，通常来说，<strong>rune类型会用来表示一个Unicode字符</strong>，一个<code>rune</code>类型（<code>int32</code>类型）就是一个字符，字符串可以看成是<code>rune</code>类型的集合。</p>
+<h3 id="字符的表示方法"><a href="#字符的表示方法" class="headerlink" title="字符的表示方法"></a>字符的表示方法</h3><ul>
+<li>最直观的字符字面值</li>
+<li>Unicode专用的转义字符（<code>\u</code>和<code>\U</code>）</li>
+<li>直接用整型值</li>
+</ul>
+<p>对于字符的初始化，最直观的就是<strong>由单引号括起的字符字面值</strong>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-string">&#x27;a&#x27;</span>			<span class="hljs-comment">// ASCII字符</span><br><span class="hljs-string">&#x27;中&#x27;</span>			<span class="hljs-comment">// Unicode字符集中的中文字符</span><br><span class="hljs-string">&#x27;\n&#x27;</span>		<span class="hljs-comment">// 换行字符</span><br><span class="hljs-string">&#x27;\&#x27;&#x27;</span>		<span class="hljs-comment">// 单引号字符</span><br><br><span class="hljs-comment">// 它们本质上都是int32类型的</span><br></code></pre></td></tr></table></figure>
+
+<p>还可以使用<strong>Unicode专用的转义字符来表示</strong>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-string">&#x27;\u4e2d&#x27;</span>			<span class="hljs-comment">// 字符：中</span><br><span class="hljs-string">&#x27;\U00004e2d&#x27;</span>	<span class="hljs-comment">// 字符：中</span><br><span class="hljs-string">&#x27;\u0027&#x27;</span>			<span class="hljs-comment">// 单引号字符</span><br></code></pre></td></tr></table></figure>
+
+<p><code>\u</code>能够接四个十六进制的数，<code>\U</code>能够接八个十六进制的数，<code>\u</code>不足以表示的时候，可以使用<code>\U</code>。</p>
+<p>还可以<strong>直接用整型值表示</strong>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-string">&#x27;\x27&#x27;</span>		<span class="hljs-comment">// 使用十六进制表示的单引号字符</span><br><span class="hljs-string">&#x27;\047&#x27;</span>		<span class="hljs-comment">// 使用八进制表示的单引号字符</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="字符串的表示方法"><a href="#字符串的表示方法" class="headerlink" title="字符串的表示方法"></a>字符串的表示方法</h3><p>对于字符串的表示，就是对上面<strong>字符表示的组合，然后用双引号引起来</strong>：</p>
+<ul>
+<li>最直观的字面值组合</li>
+<li>Unicode转义组合</li>
+<li>整型组合</li>
+</ul>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-string">&quot;abc\n&quot;</span><br><span class="hljs-string">&quot;中国人&quot;</span><br><span class="hljs-string">&quot;\u4e2d\u56fd\u4eba&quot;</span> <span class="hljs-regexp">//</span> 中国人<br><span class="hljs-string">&quot;\U00004e2d\U000056fd\U00004eba&quot;</span> <span class="hljs-regexp">//</span> 中国人<br><span class="hljs-string">&quot;中\u56fd\u4eba&quot;</span> <span class="hljs-regexp">//</span> 中国人，不同字符字面值形式混合在一起<br><span class="hljs-string">&quot;\xe4\xb8\xad\xe5\x9b\xbd\xe4\xba\xba&quot;</span> <span class="hljs-regexp">//</span> 十六进制表示的字符串字面值：中国人<br></code></pre></td></tr></table></figure>
+
+<p>但是，对于最后一个十六进制表示的字符串字面值，并不是像上面那样是3个，而是用9个十六进制的整型数值表示。</p>
+<p>原因就是这是<strong>Unicode字符串的UTF-8编码值</strong>。</p>
+<p>在UTF-32的编码方案中，就是一个Unicode码点和一个UTF-32编码值一一对应，这样虽然好理解，但是存在缺点：</p>
+<ul>
+<li>每个Unicode字符进行UTF-32编码后得到的值都会占用4个字节，使得空间利用率低</li>
+<li>由于采用4字节的固定长度进行编码，导致与采用1字节编码处理的ASCII字符集不兼容</li>
+<li>在使用4个字节存储和传输一个整型数时，需要考虑不同平台的字节序问题</li>
+</ul>
+<p>为了解决这些问题，go语言之父就发明了UTF-8编码方案，其能够根据Unicode码点值的大小动态的使用编码要用的字符数量。</p>
+<p>字符数量从1-4个字符不等：</p>
+<ul>
+<li><strong>前128个与ASCII字符集重复的码点（U+0000～U+007F）使用1个字节表示</strong></li>
+<li>带变音符号的拉丁文、希腊文、西里尔字母、阿拉伯文等使用 2 个字节表示</li>
+<li><strong>东亚文字（包括汉字）使用 3 个字节表示</strong></li>
+<li>其他极少使用的语言的字符则使用 4 个字节表示</li>
+</ul>
+<p>现在，UTF-8编码方案已经成为了Unicode编码方案的标准，各个平台也都在使用UTF-8编码方案对Unicode字符集进行编码处理。</p>
+<p>go中有对Unicode字符集（<code>rune</code>类型）进行编解码的UTF-8包：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;unicode/utf8&quot;</span><br>)<br><br><span class="hljs-comment">// rune -&gt; []byte</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">encodeRune</span><span class="hljs-params">()</span></span> &#123;<br>	<span class="hljs-keyword">var</span> r <span class="hljs-type">rune</span> = <span class="hljs-number">0x4E2D</span><br>	fmt.Printf(<span class="hljs-string">&quot;The unicode charactor is %c\n&quot;</span>, r) <span class="hljs-comment">// 中</span><br>	buf := <span class="hljs-built_in">make</span>([]<span class="hljs-type">byte</span>, <span class="hljs-number">3</span>)<br>	_ = utf8.EncodeRune(buf, r)                       <span class="hljs-comment">// 对r进行编码</span><br>	fmt.Printf(<span class="hljs-string">&quot;utf-8 representation is 0x%X\n&quot;</span>, buf) <span class="hljs-comment">// 0xE4B8AD</span><br>&#125;<br><br><span class="hljs-comment">// []byte -&gt; rune</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">decodeRune</span><span class="hljs-params">()</span></span> &#123;<br>	<span class="hljs-keyword">var</span> buf = []<span class="hljs-type">byte</span>&#123;<span class="hljs-number">0xE4</span>, <span class="hljs-number">0xB8</span>, <span class="hljs-number">0xAD</span>&#125;<br>	r, _ := utf8.DecodeRune(buf)   <span class="hljs-comment">// 对buf进行utf-8解码 </span><br>	fmt.Printf(<span class="hljs-string">&quot;the unicode charactor after decoding [0xE4, 0xB8, 0xAD] is %s\n&quot;</span>, <span class="hljs-type">string</span>(r)) <span class="hljs-comment">// 中</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="go中string类型的底层逻辑"><a href="#go中string类型的底层逻辑" class="headerlink" title="go中string类型的底层逻辑"></a>go中<code>string</code>类型的底层逻辑</h2><p>在go中，<code>string</code>类型是一个描述符，<strong>它本身并不真正的储存字符串数据，仅仅是由一个指向底层存储的指针和存储一个字符串的长度</strong>。</p>
+<p><img src="https://tva1.sinaimg.cn/large/008vxvgGly1h8s5cxi3p1j31d60mrq3m.jpg" srcset="/img/loading.gif" lazyload alt="wps_doc_1"></p>
+<h2 id="string类型常见操作"><a href="#string类型常见操作" class="headerlink" title="string类型常见操作"></a><code>string</code>类型常见操作</h2><p>在go中，<code>string</code>有如下几种操作：</p>
+<ul>
+<li>下表操作</li>
+<li>字符迭代</li>
+<li>字符串拼接</li>
+<li>字符串比较</li>
+<li>字符串转换</li>
+</ul>
+<h3 id="下标操作"><a href="#下标操作" class="headerlink" title="下标操作"></a>下标操作</h3><p>此操作是对底层数组的操作：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> s = <span class="hljs-string">&quot;中国人&quot;</span><br>fmt.Printf(<span class="hljs-string">&quot;0x%x\n&quot;</span>, s[<span class="hljs-number">0</span>])		<span class="hljs-comment">// 0xe4 字符：中</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="字符迭代"><a href="#字符迭代" class="headerlink" title="字符迭代"></a>字符迭代</h3><p>在go中有两种迭代方式：</p>
+<ul>
+<li>常规for迭代</li>
+<li>for range 迭代</li>
+</ul>
+<p>通过for迭代，得到的是字符串经过编码后的每个字节：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> s = <span class="hljs-string">&quot;中国人&quot;</span><br><span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">len</span>(s); i++ &#123;<br>  fmt.Printf(<span class="hljs-string">&quot;index: %d, value: 0x%x\n&quot;</span>, i, s[i])<br>&#125; <br><br><span class="hljs-comment">// index: 0, value: 0xe4</span><br><span class="hljs-comment">// index: 1, value: 0xb8</span><br><span class="hljs-comment">// index: 2, value: 0xad</span><br><span class="hljs-comment">// index: 3, value: 0xe5</span><br><span class="hljs-comment">// index: 4, value: 0x9b</span><br><span class="hljs-comment">// index: 5, value: 0xbd</span><br><span class="hljs-comment">// index: 6, value: 0xe4</span><br><span class="hljs-comment">// index: 7, value: 0xba</span><br><span class="hljs-comment">// index: 8, value: 0xba</span><br></code></pre></td></tr></table></figure>
+
+<p><code>len</code>获取的是字节个数</p>
+<p>通过for range迭代，得到的是字符串对应的Unicode码点及字符在字符串中的偏移值：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> s = <span class="hljs-string">&quot;中国人&quot;</span><br><br><span class="hljs-keyword">for</span> i, v := <span class="hljs-keyword">range</span> s &#123;<br>    fmt.Printf(<span class="hljs-string">&quot;index: %d, value: 0x%x\n&quot;</span>, i, v)<br>&#125;<br><br><span class="hljs-comment">// index: 0, value: 0x4e2d</span><br><span class="hljs-comment">// index: 3, value: 0x56fd</span><br><span class="hljs-comment">// index: 6, value: 0x4eba</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="字符串连接"><a href="#字符串连接" class="headerlink" title="字符串连接"></a>字符串连接</h3><p>go是支持+&#x2F;+&#x3D;这样的运算符来对字符串进行连接的，但是这种方法并不是效率最高的</p>
+<h3 id="字符串比较"><a href="#字符串比较" class="headerlink" title="字符串比较"></a>字符串比较</h3><p>Go 字符串类型支持各种比较关系操作符，包括 &#x3D; &#x3D;、!&#x3D; 、&gt;&#x3D;、&lt;&#x3D;、&gt; 和 &lt;。在比较的时候，会从第一个开始依次进行比较</p>
+<p>比较大概顺序为：</p>
+<p>先比较len——再比较指针——再比较内容</p>
+<h2 id="字符串转换"><a href="#字符串转换" class="headerlink" title="字符串转换"></a>字符串转换</h2><p>go中支持的转换有：</p>
+<ul>
+<li>string &lt;–&gt; []rune</li>
+<li>string &lt;–&gt; []byte</li>
+</ul>
+<p>这种转换不用调用函数，只用采用格式化和显示转换就可以</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> s <span class="hljs-type">string</span> = <span class="hljs-string">&quot;中国人&quot;</span><br>                      <br><span class="hljs-comment">// string -&gt; []rune</span><br>rs := []<span class="hljs-type">rune</span>(s) <br>fmt.Printf(<span class="hljs-string">&quot;%x\n&quot;</span>, rs) <span class="hljs-comment">// [4e2d 56fd 4eba]</span><br>                <br><span class="hljs-comment">// string -&gt; []byte</span><br>bs := []<span class="hljs-type">byte</span>(s) <br>fmt.Printf(<span class="hljs-string">&quot;%x\n&quot;</span>, bs) <span class="hljs-comment">// e4b8ade59bbde4baba</span><br>                <br><span class="hljs-comment">// []rune -&gt; string</span><br>s1 := <span class="hljs-type">string</span>(rs)<br>fmt.Println(s1) <span class="hljs-comment">// 中国人</span><br>                <br><span class="hljs-comment">// []byte -&gt; string</span><br>s2 := <span class="hljs-type">string</span>(bs)<br>fmt.Println(s2) <span class="hljs-comment">// 中国人</span><br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/" class="category-chain-item">go基础回顾</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/go%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">#go数据类型</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>go数据类型回顾(二)--byte、rune、字符串</div>
+      <div>https://www.zhyblog.top/2022/12/04/go基础回顾/go基础数据类型-byte、rune、字符串（二）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>张颢宇</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年12月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/12/05/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%EF%BC%88%E4%B8%89%EF%BC%89-%E6%95%B0%E7%BB%84%E3%80%81%E5%88%87%E7%89%87/" title="go数据类型回顾（三）--数组、切片">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">go数据类型回顾（三）--数组、切片</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/12/02/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B--%E6%95%B4%E5%9E%8B%E3%80%81%E6%B5%AE%E7%82%B9%E5%9E%8B%EF%BC%88%E4%B8%80%EF%BC%89/" title="go数据类型回顾(一)--整形、浮点型、复数型">
+                        <span class="hidden-mobile">go数据类型回顾(一)--整形、浮点型、复数型</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,731 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="张颢宇">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="MySQL数据库(一) – 基本架构大体来说，MySQL数据库可以分为以下两部分：  Server层 存储引擎层  Server层包括连接器、存储缓存、分析器、优化器、执行器等，涵盖MySQL的大多数核心服务功能。 存储引擎层则负责数据的存储和提取。（其架构模式是插件型的，默认为InnoDB存储引擎，可以在creat table建表的时候通过engine&#x3D;引擎名来指定其它的引擎（Memory My">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL数据库(一)--基本架构">
+<meta property="og:url" content="https://www.zhyblog.top/2022/10/22/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93-%E4%B8%80-%E5%9F%BA%E6%9C%AC%E6%9E%B6%E6%9E%84/index.html">
+<meta property="og:site_name" content="ZHY &amp; blog">
+<meta property="og:description" content="MySQL数据库(一) – 基本架构大体来说，MySQL数据库可以分为以下两部分：  Server层 存储引擎层  Server层包括连接器、存储缓存、分析器、优化器、执行器等，涵盖MySQL的大多数核心服务功能。 存储引擎层则负责数据的存储和提取。（其架构模式是插件型的，默认为InnoDB存储引擎，可以在creat table建表的时候通过engine&#x3D;引擎名来指定其它的引擎（Memory My">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h7dvo91up1j31400u0wi3.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h7edyenbcdj30ob04jdgz.jpg">
+<meta property="article:published_time" content="2022-10-22T15:34:26.000Z">
+<meta property="article:modified_time" content="2022-12-08T12:10:56.371Z">
+<meta property="article:author" content="张颢宇">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h7dvo91up1j31400u0wi3.jpg">
+  
+  
+  
+  <title>MySQL数据库(一)--基本架构 - ZHY &amp; blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.zhyblog.top","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="MySQL数据库(一)--基本架构"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-10-22 23:34" pubdate>
+          2022年10月22日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          24 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">MySQL数据库(一)--基本架构</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="MySQL数据库-一-–-基本架构"><a href="#MySQL数据库-一-–-基本架构" class="headerlink" title="MySQL数据库(一) – 基本架构"></a>MySQL数据库(一) – 基本架构</h1><p>大体来说，MySQL数据库可以分为以下两部分：</p>
+<ul>
+<li>Server层</li>
+<li>存储引擎层</li>
+</ul>
+<p>Server层包括连接器、存储缓存、分析器、优化器、执行器等，涵盖MySQL的大多数核心服务功能。</p>
+<p>存储引擎层则负责数据的存储和提取。（其架构模式是插件型的，默认为<code>InnoDB</code>存储引擎，可以在<code>creat table</code>建表的时候通过<code>engine=引擎名</code>来指定其它的引擎（<code>Memory</code> <code>MyISAM</code>））不同的存储引擎的表数据存储方式不同，支持的功能也不同。</p>
+<p>不同的存储引擎可以共用一个Server层。</p>
+<p><img src="https://tva1.sinaimg.cn/large/008vxvgGly1h7dvo91up1j31400u0wi3.jpg" srcset="/img/loading.gif" lazyload alt="MySQL架构图的副本"></p>
+<p>下面，我们来走一遍流程。</p>
+<h2 id="连接器"><a href="#连接器" class="headerlink" title="连接器"></a>连接器</h2><h3 id="连接操作"><a href="#连接操作" class="headerlink" title="连接操作"></a>连接操作</h3><p>第一步，你会通过连接器先连接到这个数据库上</p>
+<p>连接器负责和客户端建立连接、获取权限、维持和管理连接</p>
+<p>将MySQL配置好环境变量以后，可以在DOS命令窗口使用连接命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">mysql -h$ip -p$port -u$user -p<br></code></pre></td></tr></table></figure>
+
+<p>密码可以在-p后面跟着输入，但是可能会造成密码泄露，所以一般是在交互对话时输入</p>
+<p>如果是本机使用，默认端口为3306的话，可以简化语句：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">mysql -u root -p<br></code></pre></td></tr></table></figure>
+
+<p>如果你是非管理员用户的话，在通过经典的TCP握手连接上MySQL后，连接器就会要求你输入你的用户名和密码来认证你的身份</p>
+<p>认证成功后连接器就会到权限表里面查出你的拥有的权限并读取出来，此后，这个连接里面的所有的权限逻辑判断，都将依赖于读取到的权限（也就是说如果管理员在其连接时修改其权限，是不会影响其正在连接时的权限的）</p>
+<p>连接上后，如果没有操作，这个连接就处于空闲状态，可以通过<code>processlist</code>来查看连接的用户的情况：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">show processlist;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://tva1.sinaimg.cn/large/008vxvgGly1h7edyenbcdj30ob04jdgz.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>客户端如果如果太长时间没有动静的话，连接器就会自动将连接断开，这个过程是靠wait_timeout来控制自动断开时间的，可以查看：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">show</span> <span class="hljs-keyword">global</span> variables <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;wait_timeout&#x27;</span>;<br></code></pre></td></tr></table></figure>
+
+<p>默认是28800秒也就是8小时，如果想要修改可以用<code>set</code>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">set</span> <span class="hljs-keyword">global</span> wait_timeout<span class="hljs-operator">=</span>新时间;<br></code></pre></td></tr></table></figure>
+
+<h3 id="长连接和短连接"><a href="#长连接和短连接" class="headerlink" title="长连接和短连接"></a>长连接和短连接</h3><p>在数据库里面，长连接是指一直使用同一个连接，而短连接就是指每次执行几条查询语句后，就将连接断开，再次建立起一个新的连接。</p>
+<p><strong>建立连接的过程是比较复杂的，所以尽量使用长连接。</strong></p>
+<p>但是呢，由于mysql在执行过程中临时使用的内存是管理在连接对象里面的，这些资源会在连接断开的时候才释放，所以，如果长时间积累下来，可能导致占用内存特别大，会因为OOM被系统强行kill掉，从现象上看就是mysql重启了</p>
+<p>解决方案：</p>
+<ul>
+<li>定期断开长连接再重连</li>
+<li>通过执行<code>mysql_reset_connection</code>（并不是终端命令而是C的API）来重新初始化连接资源，会恢复到连接刚刚建成时的状态</li>
+</ul>
+<h2 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h2><p>连接建立完成后，你就可以执行<code>select</code>语句了，这个时候就会来到查询缓存这一步</p>
+<p>当你输入一条语句时，这条语句会经过处理后将结果返回给你，同时也会将你的查询语句和返回结果以key-value的形式缓存到内存中。当你再次输入查询语句时，会先到查询缓存里面看看，是不是之前执行过，如果有，就会直接将value返回给你，效率很高；没有，就会执行前面所说的过程</p>
+<p>但大多数情况下不建议使用查询缓存，因为其失效非常频繁。如果一个表进行了更新，那么这张表上面所有的查询缓存都会被清空，除非你的业务是一张静态表（如系统配置表），很长时间才会更新一次</p>
+<p>MySQL也提供了按需使用的方式，也就是说可以将参数<code>query_cache_type</code>设置成<code>DEMAND</code>，对要使用查询缓存的语句加入<code>SQL_cache</code>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> SQL_cache <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> T <span class="hljs-keyword">where</span> ID<span class="hljs-operator">=</span><span class="hljs-number">10</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>MySQL8.0将整个查询缓存功能彻底删去了</strong></p>
+<h2 id="分析器"><a href="#分析器" class="headerlink" title="分析器"></a>分析器</h2><p>如果没有命中查询缓存的话，就要开始真正的执行语句了。首先，MySQL要知道你要干什么，因此会对你输入的SQL语句进行解析</p>
+<p>分析器会先进行”词性分析”，你输入的是由字符串和空格组成的SQL语句，MySQL要知道你输入的字符串是什么，分别代表什么意思</p>
+<p>例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> T <span class="hljs-keyword">where</span> ID<span class="hljs-operator">=</span><span class="hljs-number">10</span>;<br></code></pre></td></tr></table></figure>
+
+<p>MySQL从<code>select</code>中识别出来，这是一条查询语句，然后把<code>字符串T</code>识别成<code>表T</code>，把<code>字符串ID</code>识别成<code>列ID</code>（同时也会判断是否数据库里有这些表和列）</p>
+<p>做完这些识别以后，就要进行语法分析。如果语法不合规范的话就会报错</p>
+<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><p>经过分析器MySQL知道你要干什么之后，在开始处理之前，还要进行优化器的处理（顾名思义，就是尽可能少的搜序数据，提高速度）</p>
+<p>优化器就是在表里面有多个索引时，决定先使用哪个索引；在一个语句有多表关联（join）的时候，决定各个表的连接顺序</p>
+<p>例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> t1 <span class="hljs-keyword">join</span> t2 <span class="hljs-keyword">using</span>(ID)  <span class="hljs-keyword">where</span> t1.c<span class="hljs-operator">=</span><span class="hljs-number">10</span> <span class="hljs-keyword">and</span> t2.d<span class="hljs-operator">=</span><span class="hljs-number">20</span>;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>既可以先从表t1里面取出c&#x3D;10的记录的ID值，根据ID值关联到表t2里面，然后再判断表t2里面的d&#x3D;20</li>
+<li>也可以先从表t2里面取出d&#x3D;20的记录的ID值，根据ID值关联到表t1里面，然后再判断表t1里面的c&#x3D;10</li>
+</ul>
+<p>最后的逻辑结果是一样的，但是效率不同，而优化器就是决定选择哪个方案</p>
+<h2 id="执行器"><a href="#执行器" class="headerlink" title="执行器"></a>执行器</h2><p>MySQL通过分析器知道了你要做什么，通过优化器知道了该怎么做，接下来就进入到了执行器阶段</p>
+<p>以前面的SQL语句为例：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> T <span class="hljs-keyword">where</span> ID<span class="hljs-operator">=</span><span class="hljs-number">10</span><br></code></pre></td></tr></table></figure>
+
+<p>当执行语句时，会先进行一个权限判断，判断你对这个表T有没有查询权限，如果没有，就会返回没有权限的错误：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">ERROR <span class="hljs-number">1142</span> (<span class="hljs-number">42000</span>): <span class="hljs-keyword">SELECT</span> command denied <span class="hljs-keyword">to</span> <span class="hljs-keyword">user</span> <span class="hljs-string">&#x27;b&#x27;</span>@<span class="hljs-string">&#x27;localhost&#x27;</span> <span class="hljs-keyword">for</span> <span class="hljs-keyword">table</span> <span class="hljs-string">&#x27;T&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>在MySQL8.0版本之前还有查询缓存的时候，如果命中了查询缓存，会在查询缓存返回结果的时候，做一次权限验证，查询也会在优化器之前调用precheck验证权限。</p>
+<p>如果有权限，那么就打开表T执行。打开表的时候，执行器会根据表T的引擎定义，去使用这个引擎提供的API</p>
+<p>执行流程如下：</p>
+<ol>
+<li>调用InnoDB引擎API（默认）去取这个表T的第一行（可能存储引擎按照页来读取，而其提供的API是按照行来读取），判断ID值是否等于10，不是就跳过，是就将这行存在结果集中</li>
+<li>调用引擎API取下一行，重复相同的判断逻辑，直到取到最后一行</li>
+<li>执行器将上述遍历中所有满足条件的行组成的记录集作为结果集返回给客户端</li>
+</ol>
+<p>执行器每次调用引擎时，都会被慢查询日志里面<code>rows_examined</code>字段通过累加记录下来这个语句执行时扫描了多少行</p>
+<p>有时执行器扫描了一行，而存储引擎可能扫描了多行，导致引擎扫描行数和<code>rows_examined</code>的不同，这可能是因为和存储引擎提供的引擎API有关系</p>
+<p>这样，整个MySQL大致的框架就是这样了。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/" class="category-chain-item">MySQL</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/MySQL/">#MySQL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>MySQL数据库(一)--基本架构</div>
+      <div>https://www.zhyblog.top/2022/10/22/MySQL数据库-一-基本架构/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>张颢宇</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年10月22日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/10/23/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%88%E4%BA%8C%EF%BC%89-%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F/" title="MySQL数据库(二)--日志系统">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">MySQL数据库(二)--日志系统</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,715 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="张颢宇">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="链表何为链表定义：链表，就是一种在计算机实际内存里面非连续，但是每个元素可以通过链表里面的指针依次链接顺序，实现的一种线性存储结构。 构成： 节点（在运行时动态生成） 数据域（存储数据元素） 指针域（指向下一个节点）     链表由一个个节点构成，每个节点都会写成结构体类型，从而存放数据域（对象可以是多个）和指针域。 12345&#x2F;&#x2F; 节点的表示typedef struct node &amp;#123;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C数据结构--链表">
+<meta property="og:url" content="https://www.zhyblog.top/2022/11/17/C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%93%BE%E8%A1%A8/index.html">
+<meta property="og:site_name" content="ZHY &amp; blog">
+<meta property="og:description" content="链表何为链表定义：链表，就是一种在计算机实际内存里面非连续，但是每个元素可以通过链表里面的指针依次链接顺序，实现的一种线性存储结构。 构成： 节点（在运行时动态生成） 数据域（存储数据元素） 指针域（指向下一个节点）     链表由一个个节点构成，每个节点都会写成结构体类型，从而存放数据域（对象可以是多个）和指针域。 12345&#x2F;&#x2F; 节点的表示typedef struct node &amp;#123;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h8841fksroj30nd04aq33.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h883yehqqqj315609zabn.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h8849g85hxj314007ymya.jpg">
+<meta property="article:published_time" content="2022-11-17T06:10:16.000Z">
+<meta property="article:modified_time" content="2022-11-17T13:08:10.861Z">
+<meta property="article:author" content="张颢宇">
+<meta property="article:tag" content="链表">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h8841fksroj30nd04aq33.jpg">
+  
+  
+  
+  <title>C数据结构--链表 - ZHY &amp; blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.zhyblog.top","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="C数据结构--链表"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-17 14:10" pubdate>
+          2022年11月17日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          57 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">C数据结构--链表</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h1><h2 id="何为链表"><a href="#何为链表" class="headerlink" title="何为链表"></a>何为链表</h2><h3 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h3><p>链表，就是一种在计算机实际内存里面非连续，但是每个元素可以通过链表里面的指针依次链接顺序，实现的一种线性存储结构。<img src="https://tva1.sinaimg.cn/large/008vxvgGly1h8841fksroj30nd04aq33.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="构成："><a href="#构成：" class="headerlink" title="构成："></a>构成：</h3><ul>
+<li>节点（在运行时动态生成）<ul>
+<li>数据域（存储数据元素）</li>
+<li>指针域（指向下一个节点）</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://tva1.sinaimg.cn/large/008vxvgGly1h883yehqqqj315609zabn.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>链表由一个个节点构成，每个节点都会写成结构体类型，从而存放数据域（对象可以是多个）和指针域。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 节点的表示</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span><br>  <span class="hljs-type">char</span> data;<br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> *<span class="hljs-title">next</span>;</span><br>&#125;linknode;<br></code></pre></td></tr></table></figure>
+
+<p><strong>对于双向链表，就是指针域里面多了一个指向前一个节点的指针</strong></p>
+<p><img src="https://tva1.sinaimg.cn/large/008vxvgGly1h8849g85hxj314007ymya.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="创建链表"><a href="#创建链表" class="headerlink" title="创建链表"></a>创建链表</h2><ol>
+<li>先创建一个节点，这个节点的指针域为<code>NULL</code></li>
+<li>然后再创建一个节点，让上一个节点的指针域指向这个节点的地址，这个节点的指针域为<code>NULL</code></li>
+<li>以此类推…</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-comment">// 定义节点</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> &#123;</span><br>  <span class="hljs-type">int</span> data;							 <span class="hljs-comment">// 数据域</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span> *<span class="hljs-title">next</span>;</span>			<span class="hljs-comment">// 指针域</span><br>&#125;linknode;<br><br><span class="hljs-comment">// 链表的创建</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">creat_linknode</span><span class="hljs-params">(linknode **p_head, linknode *p_new)</span> &#123;<br>  linknode *p_mov = *p_head;			<span class="hljs-comment">// **p_head作为储存第一个节点指针的指针</span><br>  <span class="hljs-keyword">if</span> (*p_head == <span class="hljs-literal">NULL</span>) &#123;<br>    *p_head = p_new;<br>    p_new -&gt; next = <span class="hljs-literal">NULL</span>;				<span class="hljs-comment">// 第一次在空的链表里面创建第一个节点时</span><br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-keyword">while</span> (p_mov -&gt; next != <span class="hljs-literal">NULL</span>) &#123;<br>      p_mov = p_mov -&gt; next;			<span class="hljs-comment">// p_mov从第一个节点一直移动到最后一个节点</span><br>    &#125;<br>    <br>    p_mov -&gt; next = p_new;<br>    p_new -&gt; next = <span class="hljs-literal">NULL</span>;						<span class="hljs-comment">// 将最后一个节点和新建的节点连接起来</span><br>  &#125;<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>  linknode *head = <span class="hljs-literal">NULL</span>;<br>  linknode *p_new = <span class="hljs-literal">NULL</span>;<br>  <span class="hljs-type">int</span> num, i;<br>  <br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;请输入链表的初始个数：&quot;</span>);<br>  <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, &amp;num);<br>  <br>  <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; num; i++) &#123;<br>    p_new = (linknode*) <span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(linknode));				<span class="hljs-comment">// 为新节点开辟一块新空间</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;请输入一个字符：&quot;</span>);<br>    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, &amp;p_new -&gt; data);										<span class="hljs-comment">// 传入数据域</span><br>    <br>    creat_linknode(&amp;head, p_new);							<span class="hljs-comment">// 将新节点加入列表</span><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="链表遍历"><a href="#链表遍历" class="headerlink" title="链表遍历"></a>链表遍历</h2><ol>
+<li>让指针指向第一个节点，输出第一个节点的数据域</li>
+<li>之后通过第一个节点的指针域让指针指向下一个节点</li>
+<li>以此遍历…</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 链表的遍历</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">link_print</span><span class="hljs-params">(linknode *head)</span> &#123;<br>  linknode *p_mov;<br>  p_mov = head;				<span class="hljs-comment">// 定义一个新的指针，防止head被改变;</span><br>  <br>  <span class="hljs-keyword">while</span> (p_mov != <span class="hljs-literal">NULL</span>) &#123;<br>    <span class="hljs-comment">// 先打印指针当前指向的节点的数据域</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;int=%d&quot;</span>, p_mov -&gt; next);<br>    <br>    <span class="hljs-comment">// 指针后移，保存下一个节点的地址</span><br>    p_mov = p_mov -&gt; next;				<span class="hljs-comment">// 最后p_mov就变成了NULL</span><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="链表的释放"><a href="#链表的释放" class="headerlink" title="链表的释放"></a>链表的释放</h2><ol>
+<li>重新定义一个指针，让这个指针指向head保存节点的地址，让head后移，然后释放新建指针对应的节点</li>
+<li>以此类推…</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 链表的释放</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">link_free</span><span class="hljs-params">(linknode **head)</span> &#123;<br>  <span class="hljs-comment">// 定义一个指针变量保存头节点的地址</span><br>  linknode *pb = *head;<br>  <br>  <span class="hljs-keyword">while</span> (*p_head != <span class="hljs-literal">NULL</span>) &#123;<br>    <span class="hljs-comment">// 先保存p_head指向节点的地址</span><br>    pb = *p_head;<br>    <span class="hljs-comment">// 将head指向下一个节点</span><br>    *p_head = (*p_head) -&gt; next;<br>    <span class="hljs-comment">// 释放节点并防止野指针</span><br>    <span class="hljs-built_in">free</span>(pb);<br>    pb = <span class="hljs-literal">NULL</span>;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="链表节点的查找"><a href="#链表节点的查找" class="headerlink" title="链表节点的查找"></a>链表节点的查找</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 链表节点的查找</span><br><span class="hljs-comment">// 按照数据域里面的某个数据进行查找</span><br>linknode *<span class="hljs-title function_">link_search</span><span class="hljs-params">(linknode *head, <span class="hljs-type">int</span> num)</span> &#123;<br>  linknode *p_mov;<br>  <span class="hljs-comment">// 定义的指针变量保存第一个节点的地址</span><br>  p_mov = head;<br>  <span class="hljs-comment">// 循环遍历指针</span><br>  <span class="hljs-keyword">while</span> (p_mov != <span class="hljs-literal">NULL</span>) &#123;<br>    <span class="hljs-keyword">if</span> (p_mov -&gt; data == num) &#123;<br>      <span class="hljs-keyword">return</span> p_mov;<br>    &#125;<br>    p_mov = p_mov -&gt; next;<br>  &#125;<br>  <span class="hljs-comment">// 没有找到则返回空</span><br>  <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="链表节点的删除"><a href="#链表节点的删除" class="headerlink" title="链表节点的删除"></a>链表节点的删除</h2><ul>
+<li>如果删除的是第一个节点，那么就让保存第一个节点地址的头指针指向下一个节点即可</li>
+<li>如果删除的是中间的节点，那么就让中间节点的前一个节点的指针域指向中间节点下一个节点的地址即可</li>
+<li>如果链表为空，则不需要删除</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 链表节点的删除</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">link_delete</span><span class="hljs-params">(linknode **head, <span class="hljs-type">int</span> num)</span> &#123;<br>  linknode *pb, *pf;<br>  pb = pf = *head;<br>  <span class="hljs-keyword">if</span> (*head == <span class="hljs-literal">NULL</span>) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;链表为空，没有你要删的节点&quot;</span>);  		<span class="hljs-comment">// 链表为空的情况时</span><br>  	<span class="hljs-keyword">return</span> ;<br>  &#125;<br>  <span class="hljs-keyword">while</span> ((pb -&gt; data != num) &amp;&amp; (pb -&gt; next != <span class="hljs-literal">NULL</span>)) &#123;<br>    pf = pb;<br>    pb = pb -&gt; next;										<span class="hljs-comment">// 循环找要删除的节点</span><br>  &#125;<br>  <span class="hljs-keyword">if</span> (pb -&gt; data == num) &#123;					<span class="hljs-comment">// 找到了一个节点的data与num相同</span><br>    <span class="hljs-keyword">if</span> (pb == *head) &#123;						<span class="hljs-comment">// 要删除的节点是头节点</span><br>      <span class="hljs-comment">// 让保存头节点的指针保存下一个节点的地址</span><br>      *head = pb -&gt; next;<br>    &#125; <span class="hljs-keyword">else</span> &#123;												<span class="hljs-comment">// 前一个节点的指针指向中间节点下一个节点的地址</span><br>      pf -&gt; next = pb -&gt; next;<br>    &#125;<br>    <br>    <span class="hljs-comment">// 释放空间并防止野指针</span><br>    <span class="hljs-built_in">free</span>(pb);<br>    pb = <span class="hljs-literal">NULL</span>;<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;没有你要删除的节点\n&quot;</span>);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="链表中插入一个节点"><a href="#链表中插入一个节点" class="headerlink" title="链表中插入一个节点"></a>链表中插入一个节点</h2><ul>
+<li>如果链表中没有节点，则插入的就是第一个节点</li>
+<li>如果插入节点的数值最小，则作为头节点</li>
+<li>如果插入节点的数值在中间位置，则找到前一个，插入到它后面，让前一个的指针域指向这个新插入节点的地址，新插入节点的指针域指向下一个节点的地址</li>
+<li>如果新插入的节点的数值最大，则插入到最后</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 链表的插入</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">link_insert</span><span class="hljs-params">(linknode **head, linknode *p_new)</span> &#123;<br>  linknode *pb, *pf;<br>  pb = pf = *head;<br>  <span class="hljs-keyword">if</span> (*head == <span class="hljs-literal">NULL</span>) &#123;			<span class="hljs-comment">// 链表为空链表</span><br>    *head = p_new;<br>    p_new -&gt; next = <span class="hljs-literal">NULL</span>;<br>    <span class="hljs-keyword">return</span> ;<br>  &#125;<br>  <span class="hljs-keyword">while</span> ((p_new -&gt; data &gt;= p -&gt; data) &amp;&amp; (pb -&gt; next != <span class="hljs-literal">NULL</span>)) &#123;<br>    pf = pb;<br>    pb = pb -&gt; next;<br>  &#125;<br>  <span class="hljs-keyword">if</span> (p_new -&gt; data  &lt; pb -&gt; data) &#123;		<span class="hljs-comment">// 新来的节点data比pb小，就插在pb前面</span><br>    <span class="hljs-keyword">if</span> (pb == *head) &#123;								<span class="hljs-comment">// pb是头节点的情况下</span><br>      p_new -&gt; next = *head;      <br>      *head = p_new;<br>    &#125; <span class="hljs-keyword">else</span> &#123;												<span class="hljs-comment">// pb在中间节点</span><br>      pf -&gt; next = p_new;<br>      p_new -&gt; next = pb;<br>    &#125;<br>  &#125; <span class="hljs-keyword">else</span> &#123;					<span class="hljs-comment">// 没有找到比p_new的data大的节点，就把p_new插到最后面</span><br>    pb -&gt; next = p_new;<br>    p_new -&gt; next = <span class="hljs-literal">NULL</span>;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="链表排序"><a href="#链表排序" class="headerlink" title="链表排序"></a>链表排序</h2><ul>
+<li>如果链表为空或者只有一个节点，就不需要排序</li>
+<li>先将第一个节点与后面所有的节点对比数据域，只要有比第一个节点数据域小的，则交换位置</li>
+<li>拿到新的第一个节点对比后面，依此类推</li>
+<li>最后开始第二个节点，依次类推</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 链表的排序</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">link_order</span><span class="hljs-params">(linknode *head)</span> &#123;<br>  linknode *pb, *pf, temp;<br>  pf = head;<br>  <br>  <span class="hljs-keyword">if</span> (head == <span class="hljs-literal">NULL</span>) &#123;									<span class="hljs-comment">// 没有节点</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;链表为空，不用排序\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> ;<br>  &#125; <br>  <span class="hljs-keyword">if</span> (head -&gt; next == <span class="hljs-literal">NULL</span>) &#123;					<span class="hljs-comment">// 一个节点</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;只有一个节点，不用排序\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> ;<br>  &#125;<br>  <span class="hljs-keyword">while</span> (pf -&gt; next != <span class="hljs-literal">NULL</span>) &#123;<br>    pb = pf -&gt; next;<br>    <span class="hljs-keyword">while</span> (pb != <span class="hljs-literal">NULL</span>) &#123;<br>      <span class="hljs-keyword">if</span> (pf -&gt; data &gt; pb -&gt; data) &#123;<br>        <span class="hljs-comment">// 交换对应的数据域</span><br>        temp = *pb;<br>        *pb = *pf;<br>        *pf = temp;<br>        <br>        <span class="hljs-comment">// 交换对应的指针域</span><br>        temp.next = pb -&gt; next;<br>        pb -&gt; next = pf -&gt; next;<br>        pf -&gt; next = temp.next;<br>      &#125;<br>      pb = pb -&gt; next;<br>    &#125;<br>    pf = pf -&gt; next;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="双向链表的创建与遍历"><a href="#双向链表的创建与遍历" class="headerlink" title="双向链表的创建与遍历"></a>双向链表的创建与遍历</h2><ol>
+<li>创建一个节点作为头指针，将两个指针域都保存为<code>NULL</code></li>
+<li>找到链表中的最后一个节点，让最后一个节点的指针域指向新插入节点的地址，让新加入节点的两个指针域，一个指向上一个节点的地址，一个为<code>NULL</code></li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-comment">// 定义双向链表的节点</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">student</span> &#123;</span><br>  <span class="hljs-comment">// 数据域</span><br>  <span class="hljs-type">int</span> num;        <span class="hljs-comment">// 学号</span><br>  <span class="hljs-type">int</span> score;      <span class="hljs-comment">// 分数</span><br>  <span class="hljs-type">char</span> name[<span class="hljs-number">20</span>];  <span class="hljs-comment">// 姓名</span><br><br>  <span class="hljs-comment">// 指针域</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">student</span> *<span class="hljs-title">front</span>;</span>    <span class="hljs-comment">// 保存上一个指针的地址</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">student</span> *<span class="hljs-title">next</span>;</span>     <span class="hljs-comment">// 指向下一个节点的地址</span><br>&#125;STU;<br><br><span class="hljs-comment">// 新建节点</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">double_link_creat</span><span class="hljs-params">(STU **head, STU *p_new)</span> &#123;<br>  STU *p_mov = *head;<br>  <span class="hljs-comment">// 新增节点</span><br>  <span class="hljs-keyword">if</span> (*head == <span class="hljs-literal">NULL</span>) &#123;        <span class="hljs-comment">// 当第一次加入节点，整个链表为空的时候</span><br>    *head = p_new;<br>    p_new -&gt; front = <span class="hljs-literal">NULL</span>;<br>    p_new -&gt; next = <span class="hljs-literal">NULL</span>;<br>  &#125; <span class="hljs-keyword">else</span> &#123;                  <span class="hljs-comment">// 在链表最后一个节点后面加入节点</span><br>    <span class="hljs-keyword">while</span> (p_mov -&gt; next != <span class="hljs-literal">NULL</span>) &#123;<br>      p_mov = p_mov -&gt; next;    <span class="hljs-comment">// 找到原有链表的最后一个节点</span><br>    &#125;<br>    p_mov -&gt; next = p_new;      <span class="hljs-comment">// 将新节点插入到链表里面去</span><br>    p_new -&gt; front = p_mov;<br>    p_new -&gt; next = <span class="hljs-literal">NULL</span>;<br>  &#125;<br>&#125;<br><br><span class="hljs-comment">// 打印双向链表(正向逆向都打印一遍)</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">double_link_print</span><span class="hljs-params">(STU *head)</span> &#123;<br>  STU *pb;<br>  pb = head;<br>  <span class="hljs-keyword">while</span> (pb -&gt; next != <span class="hljs-literal">NULL</span>) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;num=%d, score=%d, name=%s\n&quot;</span>, pb -&gt; num, pb -&gt; score, pb -&gt; name);<br>    pb = pb -&gt; next;<br>  &#125;<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;num=%d, score=%d, name=%s\n&quot;</span>, pb -&gt; num, pb -&gt; score, pb -&gt; name);<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;***************************\n&quot;</span>);<br><br>  <span class="hljs-keyword">while</span> (pb != <span class="hljs-literal">NULL</span>) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;num=%d, score=%d, name=%s\n&quot;</span>, pb -&gt; num, pb -&gt; score, pb -&gt; name);<br>    pb = pb -&gt; front;<br>  &#125;<br>&#125;<br><br><span class="hljs-comment">// 双向链表的节点删除</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">double_link_delete</span><span class="hljs-params">(STU **head, <span class="hljs-type">int</span> num)</span> &#123;<br>  STU *pb, *pf;<br>  pb = *head;<br>  <span class="hljs-keyword">if</span> (*head = <span class="hljs-literal">NULL</span>) &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;此链表为空，没有要删除的节点\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> ;<br>  &#125;<br>  <span class="hljs-keyword">while</span> ((pb -&gt; num != num) &amp;&amp; (pb -&gt; next != <span class="hljs-literal">NULL</span>)) &#123;<br>    pb = pb -&gt; next;<br>  &#125;<br>  <span class="hljs-keyword">if</span> (pb -&gt; num == num) &#123;       <span class="hljs-comment">// 找到了要删除的节点</span><br>    <span class="hljs-comment">// 如果节点是头节点</span><br>    <span class="hljs-keyword">if</span> (pb == *head) &#123;<br>      <span class="hljs-keyword">if</span> ((*head) -&gt; next == <span class="hljs-literal">NULL</span>) &#123;<br>        <span class="hljs-comment">// 如果链表只有一个节点</span><br>        *head = pb -&gt; next;<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-comment">// 有多个节点的情况</span><br>        *head = pb -&gt; next;<br>        (*head) -&gt; front = <span class="hljs-literal">NULL</span>;<br>      &#125;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      <span class="hljs-comment">// 如果节点在其它地方</span><br>      <span class="hljs-keyword">if</span> (pb -&gt; next != <span class="hljs-literal">NULL</span>) &#123;<br>        <span class="hljs-comment">// 删除中间节点</span><br>        pf = pb -&gt; front;   <span class="hljs-comment">// 让pf保存前一个节点的地址</span><br>        pf -&gt; next = pb -&gt; next;    <span class="hljs-comment">// 让前一个节点的next保存后一个节点的地址</span><br>        (pb -&gt; next) -&gt; front = pf;<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-comment">// 删除尾节点</span><br>        pf = pb -&gt; front;<br>        pf -&gt; next = <span class="hljs-literal">NULL</span>;<br>      &#125;<br>    &#125;<br>    <span class="hljs-comment">// 释放内存</span><br>    <span class="hljs-built_in">free</span>(pb);<br>    pb = <span class="hljs-literal">NULL</span>;<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-comment">// 没找到</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;没有你要找的节点\n&quot;</span>);<br>  &#125;<br>&#125;<br><br><span class="hljs-comment">// 主函数</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>  STU *head = <span class="hljs-literal">NULL</span>;<br>  STU *p_new = <span class="hljs-literal">NULL</span>;<br>  <span class="hljs-type">int</span> num, i;<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;请输入链表的节点数：&quot;</span>);<br>  <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;num);<br><br>  <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; num; i++) &#123;<br>    p_new = (STU *) <span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(STU));      <span class="hljs-comment">// 开辟一个内存空间</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;请输入学号、得分、姓名：&quot;</span>);<br>    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d %d %s&quot;</span>, &amp;p_new -&gt; num, &amp;p_new -&gt; score, &amp;p_new -&gt; name);<br>    double_link_creat(&amp;head, p_new); <br>  &#125;<br>  double_link_print(head);<br><br>  <span class="hljs-comment">// 双向链表删除节点操作</span><br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;请输入你要删除的节点的num\n&quot;</span>);<br>  <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;num);<br>  double_link_delete(&amp;head, num);<br>  double_link_print(head);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/C%E8%AF%AD%E8%A8%80/" class="category-chain-item">C语言</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E9%93%BE%E8%A1%A8/">#链表</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>C数据结构--链表</div>
+      <div>https://www.zhyblog.top/2022/11/17/C数据结构-链表/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>张颢宇</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月17日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/11/18/vscode%E4%B8%8B%E7%9A%84latex%E9%85%8D%E7%BD%AE/" title="vscode下的latex配置">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">vscode下的latex配置</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/30/%E5%9F%BA%E4%BA%8Enumpy%E5%92%8Cpillow%E7%9A%84%E5%AD%97%E7%AC%A6%E7%94%BB/" title="基于numpy和pillow的字符画">
+                        <span class="hidden-mobile">基于numpy和pillow的字符画</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

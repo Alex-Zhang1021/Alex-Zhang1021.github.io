@@ -1,0 +1,724 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="张颢宇">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="MySQL数据库（二）–日志系统在（一）中分析了MySQL的基本架构，知道了一条查询语句是依次通过连接器、查询缓存、分析器、优化器、执行器的功能最后到达存储引擎 那么，一条更新语句是如何执行的呢？ 我们先从一个表的一条更新语句说起,下面是一个表的创建语句： 1create table T(ID int primary key, c int);  这个表有一个主键ID和一个整型字段c，如果要将ID&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL数据库(二)--日志系统">
+<meta property="og:url" content="https://www.zhyblog.top/2022/10/23/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%88%E4%BA%8C%EF%BC%89-%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="ZHY &amp; blog">
+<meta property="og:description" content="MySQL数据库（二）–日志系统在（一）中分析了MySQL的基本架构，知道了一条查询语句是依次通过连接器、查询缓存、分析器、优化器、执行器的功能最后到达存储引擎 那么，一条更新语句是如何执行的呢？ 我们先从一个表的一条更新语句说起,下面是一个表的创建语句： 1create table T(ID int primary key, c int);  这个表有一个主键ID和一个整型字段c，如果要将ID&amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h7fgja878sj30vq0ns3yn.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h7fhqqukm9j30u013zwgx.jpg">
+<meta property="article:published_time" content="2022-10-23T05:45:55.000Z">
+<meta property="article:modified_time" content="2022-12-08T12:07:48.665Z">
+<meta property="article:author" content="张颢宇">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008vxvgGly1h7fgja878sj30vq0ns3yn.jpg">
+  
+  
+  
+  <title>MySQL数据库(二)--日志系统 - ZHY &amp; blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.zhyblog.top","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="MySQL数据库(二)--日志系统"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-10-23 13:45" pubdate>
+          2022年10月23日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">MySQL数据库(二)--日志系统</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="MySQL数据库（二）–日志系统"><a href="#MySQL数据库（二）–日志系统" class="headerlink" title="MySQL数据库（二）–日志系统"></a>MySQL数据库（二）–日志系统</h1><p>在（一）中分析了MySQL的基本架构，知道了一条查询语句是依次通过连接器、查询缓存、分析器、优化器、执行器的功能最后到达存储引擎</p>
+<p>那么，一条更新语句是如何执行的呢？</p>
+<p>我们先从一个表的一条更新语句说起,下面是一个表的创建语句：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> T(ID <span class="hljs-type">int</span> <span class="hljs-keyword">primary</span> key, c <span class="hljs-type">int</span>);<br></code></pre></td></tr></table></figure>
+
+<p>这个表有一个主键ID和一个整型字段c，如果要将ID&#x3D;2这一行的值加1，就会这么写：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">update</span> T <span class="hljs-keyword">set</span> c<span class="hljs-operator">=</span>c<span class="hljs-operator">+</span><span class="hljs-number">1</span> <span class="hljs-keyword">where</span> ID<span class="hljs-operator">=</span><span class="hljs-number">2</span>;<br></code></pre></td></tr></table></figure>
+
+<p>然后，上面所说的查询语句的流程，更新语句也会走一遍</p>
+<p>某个表一旦更新，那么在有关这个表的所有的查询缓存都会抹去</p>
+<p>只不过，与查询流程不一样，更新语句还涉及两个重要的日志模块：</p>
+<ul>
+<li>redo log（重做日志）</li>
+<li>binlog（归档日志）</li>
+</ul>
+<h2 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h2><p>如果每次进行更新操作时，都要将数据写入磁盘，然后磁盘再去找到相应的那条记录，然后再进行更新，那么整个过程的IO成本（寻址和上下文切换的时间成本）、查找成本都很大</p>
+<p>为了解决这个问题，于是就有了WAL技术（Write-Ahead logging），就是，当有一条记录需要更新的时候，InnoDB引擎就会先把记录写到redo log日志里面，并且更新内存（因为redo log是固定大小的，内存会有满的时候），这个时候更新就算完成了</p>
+<p>之后，如果redo log没有满，InnoDB引擎就会等系统比较空闲的时候，再到磁盘里面找到对应的记录，将redo log里面的记录更新到磁盘里面去</p>
+<p>如果redo log满了，因为InnoDB的redo log是固定大小的：<img src="https://tva1.sinaimg.cn/large/008vxvgGly1h7fgja878sj30vq0ns3yn.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><code>write pos</code>是当前记录的位置，会一边写一边后移，一直循环下去；<code>check point</code>是当前要擦除的位置，擦除记录之前要把记录写到磁盘里面去</p>
+<p>所以写入磁盘的优先级是大于其它执行命令的，会先将数据写入磁盘，使得<code>check point</code>向后推移一部分，从而能够再次的<code>write pos</code></p>
+<p>有了<code>redo log</code>，就有了<code>crash-safe</code>这个能力，即InnoDB引擎就可以保证即使是数据库发生了异常重启，之前提交的记录都不会丢失（数据库和<code>redo log</code>是独立的），顾名思义所以才叫日志嘛</p>
+<p><code>redo log</code>的nb之处就在于它把随机的I&#x2F;O写成了顺序的I&#x2F;O，极大的提高了效率</p>
+<p>将记录写在<code>redo log</code>上也是写入磁盘的，只不过和更新记录的随机I&#x2F;O不同，这个是顺序I&#x2F;O</p>
+<h2 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h2><p>从MySQL的基本架构来看，其实就分为两大块：</p>
+<ul>
+<li>Server层：主要负责功能实现</li>
+<li>引擎层：负责存储相关的事宜</li>
+</ul>
+<p>上面提到的<code>redo log</code>是InnoDB引擎特有的日志，而在Server层也有自己的日志，那就是<code>binlog</code>(归档日志)</p>
+<p>那么，为什么会有两份日志呢？</p>
+<p>因为最开始MySQL是没有InnoDB引擎的，其为自带的MyISAM引擎，不具备<code>crash-frash</code>功能，<code>binlog</code>日志只能用于归档，而InnoDB是以插件的形式引入到MySQL里面的，因为<code>binlog</code>只能用于归档，所以为了<code>crash-frash</code>，就又写了一个日志为<code>redo log</code></p>
+<p>不同：</p>
+<ol>
+<li><code>redo log</code>是InnoDB引擎特有的，而<code>binlog</code>是Server层的，所有的引擎都可以使用</li>
+<li><code>redo log</code>是物理日志，记录的是“在某个数据页上做了什么修改”，而<code>binlog</code>是逻辑日志，记录语句的原始逻辑</li>
+<li><code>redo log</code>是循环写入的，空间固定会被用完，而<code>binlog</code>是可以追加的，即记录写到大小之后会自动切换下一个，不会抹去之前的记录</li>
+</ol>
+<p>理解了这两个日志之后，来看看执行器和InnoDB引擎在执行<code>update</code>的时候的内部流程：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">update</span> T <span class="hljs-keyword">set</span> c<span class="hljs-operator">=</span>c<span class="hljs-operator">+</span><span class="hljs-number">1</span> <span class="hljs-keyword">where</span> ID<span class="hljs-operator">=</span><span class="hljs-number">2</span>;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://tva1.sinaimg.cn/large/008vxvgGly1h7fhqqukm9j30u013zwgx.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>其中，浅色部分的是InnoDB引擎执行的，深色部分是执行器执行的</p>
+<ul>
+<li>对数据页在内存中的这个情况，因为InnoDB将数据加载到内存中的最小单位是16K（Linux下是4K），所以会出现要查询的数据，已经出现在内存中的情况</li>
+<li><code>binlog</code>是写入磁盘的，其记录的是这个操作</li>
+</ul>
+<p>对于<code>redo log</code>的<code>prepare</code>和<code>commit</code>这两步，被称为两阶段提交</p>
+<h2 id="两阶段提交"><a href="#两阶段提交" class="headerlink" title="两阶段提交"></a>两阶段提交</h2><p>对于两阶段提交，目的是为了让<code>redo log</code>和<code>binlog</code>两个日志保持逻辑一致</p>
+<p>如果不是两阶段提交，那么就会发生下面两种情况：</p>
+<ul>
+<li>先<code>redo log</code>再<code>binlog</code></li>
+<li>先<code>binlog</code>再<code>redo log</code></li>
+</ul>
+<p>如果是先<code>redo log</code>后<code>binlog</code>，那么当<code>redo log</code>写完记录之后，如果数据库异常crash了，那么<code>redo log</code>仍有这条结果，而对于<code>binlog</code>，是没有这个逻辑记录的，导致后面如果恢复库的时候，会使临时库里面少了一条更新</p>
+<p>如果是先<code>binlog</code>后<code>redo log</code>，那么当<code>binlog</code>写完逻辑记录后，如果数据库异常crash了，就会导致<code>redo log</code>里面没有这个值的记录，当恢复数据库的时候，会从临时库里面多出来一条事务</p>
+<p>这不仅会对恢复数据有影响，还会对数据库的扩容方面有影响（数据库的扩容一般是全量备份加上<code>binlog</code>来实现的）</p>
+<p>两阶段提交的做法可以迁移到其它方面，本质上就是为了保证逻辑上的一致性</p>
+<h2 id="数据恢复过程"><a href="#数据恢复过程" class="headerlink" title="数据恢复过程"></a>数据恢复过程</h2><p>有时DBA会说MySQL可以恢复到半个月内任意一秒的状态，这是怎么做到的？</p>
+<p>前面提到过，<code>binlog</code>可以记录所有的逻辑操作，而且是采用追加写的方式。那么，备份系统里面，就能够保存一定时期内的所有<code>binlog</code>，同时系统会定期做整库备份（定期取决于系统的重要性）</p>
+<p>理解了内层逻辑，至于恢复，那就是：</p>
+<ol>
+<li>先找到最近一次的全量备份（整库备份），从这个备份里面恢复数据到临时库</li>
+<li>然后，从备份的时间点里面，将<code>binlog</code>一个个的拉出来，重放到删表（库）的时候</li>
+<li>这个时候你的临时库就和删表之前的线上库一样了，你只要把临时库里面的表数据按需要恢复到线上库去即可</li>
+</ol>
+<p>建议将<code>innodb_flush_log_at_trx_commit</code>这个参数设置成1，可以使<code>redo log</code>都直接持久化到磁盘，可以保证MySQL数据库异常crash后数据不会丢失</p>
+<p><code>sync_binlog</code>参数也建议设置成1，表示每次事务的<code>binlog</code>都持久化到磁盘，可以保证异常crash后<code>binlog</code>不会丢失</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">数据库</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/" class="category-chain-item">MySQL</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/MySQL/">#MySQL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>MySQL数据库(二)--日志系统</div>
+      <div>https://www.zhyblog.top/2022/10/23/MySQL数据库（二）-日志系统/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>张颢宇</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年10月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/10/30/try-python%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" title="try--python异常处理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">try--python异常处理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/22/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93-%E4%B8%80-%E5%9F%BA%E6%9C%AC%E6%9E%B6%E6%9E%84/" title="MySQL数据库(一)--基本架构">
+                        <span class="hidden-mobile">MySQL数据库(一)--基本架构</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
