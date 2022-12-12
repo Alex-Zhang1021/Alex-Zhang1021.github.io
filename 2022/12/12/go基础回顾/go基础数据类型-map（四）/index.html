@@ -16,22 +16,22 @@
   <meta name="author" content="张颢宇">
   <meta name="keywords" content="">
   
-    <meta name="description" content="数组Go中的数组有两个特点：  长度固定 由同种类型的元素组成  声明数组的声明语法有两种：  var 数组名 [数组长度]元素类型 var 数组名 [...]元素类型     （初始化后Go编译器会自动判断长度）  数组在Go中是占用的一块连续的内存，len函数可以获取到数组的长度，unsafe.Sizeof函数可以获取到数组占用的字节大小。 初始化声明了一个数组之后，如果不对它进行初始化，数组">
+    <meta name="description" content="定义在go中，map类型的表示为map[key_type]value_type map类型对value没有限制，但是对key，必须要保证key的唯一性，go语言中的key要支持&#x3D;&#x3D;和!&#x3D;两种运算符 在go语言中，函数类型、map类型、切片类型只支持与nil进行比较，而不能和同类型的变量相互比较，map类型中key也不能是以上类型。 1234567891011121314151617package">
 <meta property="og:type" content="article">
-<meta property="og:title" content="go数据类型回顾（三）--数组、切片">
-<meta property="og:url" content="https://www.zhyblog.top/2022/12/05/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%EF%BC%88%E4%B8%89%EF%BC%89-%E6%95%B0%E7%BB%84%E3%80%81%E5%88%87%E7%89%87/index.html">
+<meta property="og:title" content="go数据类型回顾（四）--map类型">
+<meta property="og:url" content="https://www.zhyblog.top/2022/12/12/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B-map%EF%BC%88%E5%9B%9B%EF%BC%89/index.html">
 <meta property="og:site_name" content="ZHY &amp; blog">
-<meta property="og:description" content="数组Go中的数组有两个特点：  长度固定 由同种类型的元素组成  声明数组的声明语法有两种：  var 数组名 [数组长度]元素类型 var 数组名 [...]元素类型     （初始化后Go编译器会自动判断长度）  数组在Go中是占用的一块连续的内存，len函数可以获取到数组的长度，unsafe.Sizeof函数可以获取到数组占用的字节大小。 初始化声明了一个数组之后，如果不对它进行初始化，数组">
+<meta property="og:description" content="定义在go中，map类型的表示为map[key_type]value_type map类型对value没有限制，但是对key，必须要保证key的唯一性，go语言中的key要支持&#x3D;&#x3D;和!&#x3D;两种运算符 在go语言中，函数类型、map类型、切片类型只支持与nil进行比较，而不能和同类型的变量相互比较，map类型中key也不能是以上类型。 1234567891011121314151617package">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-12-05T02:21:33.000Z">
-<meta property="article:modified_time" content="2022-12-08T12:08:48.603Z">
+<meta property="article:published_time" content="2022-12-12T02:43:37.000Z">
+<meta property="article:modified_time" content="2022-12-12T13:24:34.952Z">
 <meta property="article:author" content="张颢宇">
 <meta property="article:tag" content="go数据类型">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>go数据类型回顾（三）--数组、切片 - ZHY &amp; blog</title>
+  <title>go数据类型回顾（四）--map类型 - ZHY &amp; blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -197,7 +197,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="go数据类型回顾（三）--数组、切片"></span>
+            <span id="subtitle" data-typed-text="go数据类型回顾（四）--map类型"></span>
           
         </div>
 
@@ -208,8 +208,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-12-05 10:21" pubdate>
-          2022年12月5日 上午
+        <time datetime="2022-12-12 10:43" pubdate>
+          2022年12月12日 上午
         </time>
       </span>
     
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.5k 字
+          1.8k 字
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          13 分钟
+          15 分钟
         
       </span>
     
@@ -269,64 +269,57 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">go数据类型回顾（三）--数组、切片</h1>
+            <h1 style="display: none">go数据类型回顾（四）--map类型</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h1><p>Go中的数组有两个特点：</p>
-<ul>
-<li>长度固定</li>
-<li>由同种类型的元素组成</li>
-</ul>
-<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>数组的声明语法有两种：</p>
-<ul>
-<li><code>var 数组名 [数组长度]元素类型</code></li>
-<li><code>var 数组名 [...]元素类型</code>     （初始化后Go编译器会自动判断长度）</li>
-</ul>
-<p>数组在Go中是占用的一块连续的内存，<code>len</code>函数可以获取到数组的长度，<code>unsafe.Sizeof</code>函数可以获取到数组占用的字节大小。</p>
-<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>声明了一个数组之后，如果<strong>不对它进行初始化，数组元素的值默认为0</strong>。</p>
-<p>语法为：</p>
-<ul>
-<li><code>var 数组名 = [数组长度]&#123;元素1， 元素2&#125;</code></li>
-<li><code>var 数组名 = [...]&#123;元素1， 元素2&#125;</code>     (此时会自动判断长度)</li>
-<li><code>var 数组名 = [数组长度]&#123;索引：元素值&#125;</code>    (这种方法适用于大且稀疏的数组)</li>
-</ul>
-<h2 id="访问数组元素"><a href="#访问数组元素" class="headerlink" title="访问数组元素"></a>访问数组元素</h2><p>在Go中，可以通过下标（索引）对数组中的元素进行访问。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> arr = [...]<span class="hljs-type">int</span>&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>&#125;		<span class="hljs-comment">// 6个元素</span><br>arr1 := arr[<span class="hljs-number">0</span>]	<span class="hljs-comment">// 访问第一个元素</span><br>arr6 := arr[<span class="hljs-number">5</span>]	<span class="hljs-comment">// 访问最后一个元素</span><br></code></pre></td></tr></table></figure>
+                <h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>在go中，map类型的表示为<code>map[key_type]value_type</code></p>
+<p>map类型对<code>value</code>没有限制，但是对<code>key</code>，<strong>必须要保证<code>key</code>的唯一性，go语言中的<code>key</code>要支持<code>==</code>和<code>!=</code>两种运算符</strong></p>
+<p>在go语言中，<em><strong>函数类型、map类型、切片类型只支持与<code>nil</code>进行比较，而不能和同类型的变量相互比较，map类型中<code>key</code>也不能是以上类型。</strong></em></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span><br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	s1 := <span class="hljs-built_in">make</span>([]<span class="hljs-type">int</span>, <span class="hljs-number">2</span>)<br>	s2 := <span class="hljs-built_in">make</span>([]<span class="hljs-type">int</span>, <span class="hljs-number">1</span>)<br><br>	f1 := <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;&#125;<br>	f2 := <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;&#125;<br><br>	m1 := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-type">int</span>]<span class="hljs-type">int</span>)<br>	m2 := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-type">int</span>]<span class="hljs-type">int</span>)<br><br>	fmt.Println(s1 == <span class="hljs-literal">nil</span>)<br>	fmt.Println(s1 == s2)			<span class="hljs-comment">// 错误：invalid operation: s1 == s2 (slice can only be compared to nil)</span><br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>在Go中访问数组元素时，如果<strong>下标超出数组长度时会报错</strong>，并且，<strong>下标值不能是负数（和Python不同）</strong>。</p>
-<h2 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h2><p>在Go中可以声明多维数组，只要将数组长度并排就可以：</p>
-<p><code>var arr [3][3][3]int</code></p>
-<p>逐一展开就行。</p>
-<p><strong>Go中的数组类型不同于C语言中的数组类型，C里面的数组变量可以视为指向数组第一个元素的指针，而Go的数组变量表示的是整个数组类型，这样就导致了Go语言数组类型的传值机制并不好</strong>。</p>
-<h1 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h1><p>Go中切片和数组类型很像，少了长度这一限制，更为灵活。</p>
-<h2 id="声明-1"><a href="#声明-1" class="headerlink" title="声明"></a>声明</h2><p><code>var 切片名 []类型</code>     (少了长度这一限制)</p>
-<p>但是切片也可以通过<code>len</code>函数获取到当前状态下的长度</p>
-<h2 id="初始化-1"><a href="#初始化-1" class="headerlink" title="初始化"></a>初始化</h2><p>和数组类型一样，只不过去掉了长度固定的限制。</p>
-<p>此时也可以向切片中添加元素，使用<code>append</code>函数：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> sli = []<span class="hljs-type">int</span>&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>&#125;<br>sli = <span class="hljs-built_in">append</span>(sli, <span class="hljs-number">7</span>)		<span class="hljs-comment">// 切片变为[1 2 3 4 5 6 7]</span><br></code></pre></td></tr></table></figure>
+<h1 id="声明和初始化"><a href="#声明和初始化" class="headerlink" title="声明和初始化"></a>声明和初始化</h1><h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> m <span class="hljs-keyword">map</span>[<span class="hljs-type">string</span>]<span class="hljs-type">int</span> 	<span class="hljs-comment">// 一个map[string]int类型的变量</span><br></code></pre></td></tr></table></figure>
 
-<h2 id="底层逻辑"><a href="#底层逻辑" class="headerlink" title="底层逻辑"></a>底层逻辑</h2><p>在Go中，<strong>切片本质上还是数组</strong>，切片是由三部分构成的：</p>
-<ul>
-<li>Array，指向底层的数组</li>
-<li>len， 切片类型的长度</li>
-<li>cap， 数组类型的容量</li>
+<p>和切片类型一样，如果没有显式的对其赋值，其变量的默认值为<code>nil</code></p>
+<p>但是，切片在这种基础上是可以利用<code>append</code>函数追加值的，而map类型不行</p>
+<h2 id="显式初始化"><a href="#显式初始化" class="headerlink" title="显式初始化"></a>显式初始化</h2><ul>
+<li>使用复合字面值初始化</li>
+<li>使用<code>make</code>为map类型的变量进行显式初始化</li>
 </ul>
-<p>在切片类型中，len永远是小于等于cap的。</p>
-<p>Go编译器会为每个新创建的切片建立一个底层的数组，默认cap和len一样长，但是其实是可以指定的：</p>
-<ul>
-<li>通过<code>make</code>函数来创建切片，并指定底层数组的长度</li>
-<li>通过<code>array[low: high: max]</code>基于一个已经存在的数组创建切片，即<strong>数组的切片化</strong></li>
-<li>基于切片创建切片</li>
+<h3 id="复合字面值初始化"><a href="#复合字面值初始化" class="headerlink" title="复合字面值初始化"></a>复合字面值初始化</h3><p><code>m1 := map[int]string&#123;&#125;</code></p>
+<p>m1变量没有任何键值对，但是其也不等同于<code>nil</code></p>
+<p><strong>提醒：</strong>因为在声明的时候已经指明了key和value的类型，所以对key和value进行赋值的时候可以省略类型名称</p>
+<h3 id="使用make为map类型变量进行显式初始化"><a href="#使用make为map类型变量进行显式初始化" class="headerlink" title="使用make为map类型变量进行显式初始化"></a>使用make为map类型变量进行显式初始化</h3><p>类比对切片的操作，使用make时：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go">s1 := <span class="hljs-built_in">make</span>([]<span class="hljs-type">int</span>, <span class="hljs-number">3</span>, <span class="hljs-number">6</span>)<br></code></pre></td></tr></table></figure>
+
+<p>这样就开辟了一个int类型的初始长度为3、容量为6的切片</p>
+<p>同样的，对于map：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs go">m1 := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-type">int</span>]<span class="hljs-type">string</span>)	<span class="hljs-comment">// 未指定初始容量</span><br>m2 := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-type">int</span>]<span class="hljs-type">string</span>, <span class="hljs-number">8</span>)		<span class="hljs-comment">// 指定初始容量为8</span><br></code></pre></td></tr></table></figure>
+
+<p>当键值对满了之后，其能够自动扩容</p>
+<h1 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h1><ul>
+<li>插入新键值对</li>
+<li>获取键值对数量</li>
+<li>查找和数据读取</li>
+<li>删除数据</li>
+<li>遍历map中的键值数据</li>
 </ul>
-<h3 id="make函数"><a href="#make函数" class="headerlink" title="make函数"></a><code>make</code>函数</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// make语法</span><br>sli := <span class="hljs-built_in">make</span>([]<span class="hljs-type">byte</span>, <span class="hljs-number">3</span>, <span class="hljs-number">6</span>)	<span class="hljs-number">3</span>为切片的初始长度，<span class="hljs-number">6</span>为底层数组的容量<br><span class="hljs-comment">//不指明容量</span><br>sli := <span class="hljs-built_in">make</span>([]<span class="hljs-type">byte</span>, <span class="hljs-number">6</span>) 切片的初始长度和容量都为<span class="hljs-number">6</span><br></code></pre></td></tr></table></figure>
+<h2 id="插入新键值对"><a href="#插入新键值对" class="headerlink" title="插入新键值对"></a>插入新键值对</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs go">m := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-type">int</span>]<span class="hljs-type">string</span>)<br>m[<span class="hljs-number">1</span>] = <span class="hljs-string">&quot;value1&quot;</span><br>m[<span class="hljs-number">2</span>] = <span class="hljs-string">&quot;value2&quot;</span><br>m[<span class="hljs-number">3</span>] = <span class="hljs-string">&quot;value3&quot;</span><br></code></pre></td></tr></table></figure>
 
-<h3 id="array-low-high-max-函数"><a href="#array-low-high-max-函数" class="headerlink" title="array[low: high: max]函数"></a><code>array[low: high: max]</code>函数</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> arr = [...]<span class="hljs-type">int</span>&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>&#125; 	<span class="hljs-comment">// 创建一个数组</span><br><span class="hljs-comment">// 基于此数组创建一个切片</span><br>sli := arr[<span class="hljs-number">3</span>: <span class="hljs-number">7</span>: <span class="hljs-number">9</span>]<br><span class="hljs-comment">// 起始元素为low对应于数组中的下标</span><br><span class="hljs-comment">// len为high-low即为4</span><br><span class="hljs-comment">// cap为max-low即为6</span><br><br>sl[<span class="hljs-number">0</span>] += <span class="hljs-number">10</span><br><span class="hljs-comment">// 由于切片的底层是数组，所以对切片的修改也会改变底层数组的值</span><br></code></pre></td></tr></table></figure>
+<p>当插入新的键值对时，如果key已经存在，新值会覆盖旧值</p>
+<h2 id="获取键值对数量"><a href="#获取键值对数量" class="headerlink" title="获取键值对数量"></a>获取键值对数量</h2><p>可以通过<code>len</code>来获取键值对的数量是多少，不过不能像切片那样调用cap来获取当前容量</p>
+<h2 id="查找和数据读取"><a href="#查找和数据读取" class="headerlink" title="查找和数据读取"></a>查找和数据读取</h2><p>在对map中的键值对进行查找和读取的时候，特别要注意的就是如果key不存在，那么返回的值也是0，这样的话就会和储存的value的值为0的时候冲突，所以单纯的<code>k := m[&quot;key1&quot;]</code>是不行的，那么就需要加上条件判断：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs go">m := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-type">string</span>]<span class="hljs-type">int</span>)<br>v, ok := m[<span class="hljs-string">&quot;key1&quot;</span>]<br><span class="hljs-keyword">if</span> !ok &#123;<br>  <span class="hljs-comment">// &quot;key1&quot;不在map中</span><br>&#125;<br><br><span class="hljs-comment">// &quot;key1&quot;在map中，v将被赋予&quot;key1&quot;键对应的value</span><br></code></pre></td></tr></table></figure>
 
-<p>省略<code>max</code>时<code>max</code>就是数组的最大长度</p>
-<h2 id="动态扩容"><a href="#动态扩容" class="headerlink" title="动态扩容"></a>动态扩容</h2><p>当len长度等于cap容量时，此时再append追加元素时，就会导致cap容量不够，Go语言为了解决这个问题，就设计了动态扩容机制，此时<strong>会copy这个数组给一个新的数组，这个新数组的cap会变成原来数组的两倍，以后就会在这个新数组上进行操作，</strong>以此类推。</p>
-<p>如果触发了自动扩容机制，那么之后的操作就不会是在原来的数组上操作了。</p>
+<p>可以使用空标识符来代替v，只判断键是否存在</p>
+<h2 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h2><p>语法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-built_in">delete</span>(m, <span class="hljs-string">&quot;key2&quot;</span>)		<span class="hljs-comment">// 删除&quot;key2&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="遍历map中的键值数据"><a href="#遍历map中的键值数据" class="headerlink" title="遍历map中的键值数据"></a>遍历map中的键值数据</h2><p>在对map中的键值对进行遍历时，一定要注意其并不是按照顺序进行操作的</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// key, value都进行迭代</span><br><span class="hljs-keyword">for</span> k, v := <span class="hljs-keyword">range</span> m &#123;<br>  <span class="hljs-comment">// 打印键值对</span><br>&#125;<br><br><span class="hljs-comment">// 只对key进行迭代</span><br><span class="hljs-keyword">for</span> k, _ := <span class="hljs-keyword">range</span> m &#123;<br>  <span class="hljs-comment">// 打印key</span><br>&#125;<br><span class="hljs-keyword">for</span> k := <span class="hljs-keyword">range</span> m &#123;<br>  <span class="hljs-comment">// 打印key</span><br>&#125;<br><br><span class="hljs-comment">// 只迭代返回value</span><br><span class="hljs-keyword">for</span> _, v := <span class="hljs-keyword">range</span> m &#123;<br>  <span class="hljs-comment">// 打印value</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="map变量的传递开销"><a href="#map变量的传递开销" class="headerlink" title="map变量的传递开销"></a>map变量的传递开销</h2><p>和切片类型一样，map类型也是引用类型，作为参数传递时，实际上传递的是一个描述符，在函数内部对map类型参数的修改在函数外面也是可见的</p>
 
                 
               </div>
@@ -372,8 +365,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>go数据类型回顾（三）--数组、切片</div>
-      <div>https://www.zhyblog.top/2022/12/05/go基础回顾/go基础数据类型（三）-数组、切片/</div>
+      <div>go数据类型回顾（四）--map类型</div>
+      <div>https://www.zhyblog.top/2022/12/12/go基础回顾/go基础数据类型-map（四）/</div>
     </div>
     <div class="license-meta">
       
@@ -385,7 +378,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年12月5日</div>
+          <div>2022年12月12日</div>
         </div>
       
       
@@ -417,18 +410,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/12/12/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B-map%EF%BC%88%E5%9B%9B%EF%BC%89/" title="go数据类型回顾（四）--map类型">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">go数据类型回顾（四）--map类型</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/12/04/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B-byte%E3%80%81rune%E3%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%88%E4%BA%8C%EF%BC%89/" title="go数据类型回顾(二)--byte、rune、字符串">
-                        <span class="hidden-mobile">go数据类型回顾(二)--byte、rune、字符串</span>
+                      <a href="/2022/12/05/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%EF%BC%88%E4%B8%89%EF%BC%89-%E6%95%B0%E7%BB%84%E3%80%81%E5%88%87%E7%89%87/" title="go数据类型回顾（三）--数组、切片">
+                        <span class="hidden-mobile">go数据类型回顾（三）--数组、切片</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
