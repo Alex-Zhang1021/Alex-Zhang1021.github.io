@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>Python--视频下载及转换</title>
+    <link href="/2022/12/15/Python-%E8%A7%86%E9%A2%91%E4%B8%8B%E8%BD%BD%E5%8F%8A%E8%BD%AC%E6%8D%A2/"/>
+    <url>/2022/12/15/Python-%E8%A7%86%E9%A2%91%E4%B8%8B%E8%BD%BD%E5%8F%8A%E8%BD%AC%E6%8D%A2/</url>
+    
+    <content type="html"><![CDATA[<h1 id="视频抓取下载"><a href="#视频抓取下载" class="headerlink" title="视频抓取下载"></a>视频抓取下载</h1><p><a href="https://you-get.org/#supported-sites">支持网站&#x2F;资源类型</a></p><h2 id="you-get"><a href="#you-get" class="headerlink" title="you-get"></a>you-get</h2><p>通过<code>pip3 install you-get</code>将依赖下载到本地</p><p>you-get是一个小型的命令行工具，可以从网络中获取视频&#x2F;音频&#x2F;图像</p><h3 id="下载视频"><a href="#下载视频" class="headerlink" title="下载视频"></a>下载视频</h3><p>通过<code>you-get [url]</code>的命令可以将视频&#x2F;音频&#x2F;图像下载到当前命令行所在的目录</p><p>而<code>you-get -i [url]</code>，加上<code>-i</code>之后就可以查看所有能可用的质量和格式</p><h3 id="设置下载的路径"><a href="#设置下载的路径" class="headerlink" title="设置下载的路径"></a>设置下载的路径</h3><p>使用<code>-o</code>设置下载的目录</p><p>使用<code>-0</code>设置下载的文件名</p><h3 id="鉴权-x2F-视频"><a href="#鉴权-x2F-视频" class="headerlink" title="鉴权&#x2F;视频"></a>鉴权&#x2F;视频</h3><p>通过<code>-c</code>提供浏览器的Cookie确保能获取视频</p><h3 id="拉取列表"><a href="#拉取列表" class="headerlink" title="拉取列表"></a>拉取列表</h3><p>使用<code>-u</code>查看所有能下载的url</p><h3 id="Google搜索下载"><a href="#Google搜索下载" class="headerlink" title="Google搜索下载"></a>Google搜索下载</h3><p>可以使用<code>you-get [关键字]</code>在google浏览器上进行搜索然后下载，当然这种方式很随意</p><h1 id="视频转音频"><a href="#视频转音频" class="headerlink" title="视频转音频"></a>视频转音频</h1><h2 id="os-walk"><a href="#os-walk" class="headerlink" title="os.walk()"></a><code>os.walk()</code></h2><p>使用<code>os.walk()</code>来深度遍历文件</p><p>在python中，<code>os.walk()</code>调用方法为：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">walk</span>(<span class="hljs-params">top, topdown=<span class="hljs-literal">True</span>, onerror=<span class="hljs-literal">None</span>, followlinks=<span class="hljs-literal">False</span></span>):<br></code></pre></td></tr></table></figure><ul><li>top也就是文件的根目录</li><li>topdown为True时，由外向里遍历，否则由里向外</li><li>followlinks是快捷方式所在的原目录</li></ul><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">import</span> glob<br><span class="hljs-keyword">from</span> pydub <span class="hljs-keyword">import</span> AudioSegment<br><br>wenjianjia = []<br>path = <span class="hljs-string">&quot;/Users/zhanghaoyu/Desktop/video&quot;</span>         <span class="hljs-comment"># input(&#x27;请输入要转码的父文件夹路径：&#x27;)</span><br><span class="hljs-keyword">for</span> root, dirs, files <span class="hljs-keyword">in</span> os.walk(path):         <span class="hljs-comment"># 文件夹目录、目录列表、文件列表</span><br>    wenjianjia.append(root)<br>wjj = wenjianjia<br><br><span class="hljs-keyword">for</span> <span class="hljs-built_in">dir</span> <span class="hljs-keyword">in</span> wjj:<br>    video_dir = <span class="hljs-built_in">dir</span><br>    extension_list = (<span class="hljs-string">&#x27;*.mp4&#x27;</span>, <span class="hljs-string">&#x27;*.flv&#x27;</span>)<br>    i = <span class="hljs-number">1</span><br><br>    os.chdir(video_dir)     <span class="hljs-comment"># 改变当前路径</span><br>    <span class="hljs-keyword">for</span> extension <span class="hljs-keyword">in</span> extension_list:<br>        <span class="hljs-keyword">for</span> video <span class="hljs-keyword">in</span> glob.glob(extension):      <span class="hljs-comment"># 匹配后缀</span><br>            mp3_filename = os.path.splitext(os.path.basename(video))[<span class="hljs-number">0</span>] + <span class="hljs-string">&#x27;.mp3&#x27;</span><br>            AudioSegment.from_file(video).export(mp3_filename, <span class="hljs-built_in">format</span>=<span class="hljs-string">&#x27;mp3&#x27;</span>)<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;已转码&#x27;</span>, <span class="hljs-built_in">str</span>(i), <span class="hljs-string">&#x27;个视频！&#x27;</span>)<br>            i += <span class="hljs-number">1</span><br>            os.remove(video)        <span class="hljs-comment"># 删除原来的视频</span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>Python</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Python</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>go基础回顾--方法</title>
     <link href="/2022/12/14/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE-%E6%96%B9%E6%B3%95/"/>
     <url>/2022/12/14/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE-%E6%96%B9%E6%B3%95/</url>
