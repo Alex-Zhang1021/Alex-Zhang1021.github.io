@@ -16,22 +16,22 @@
   <meta name="author" content="张颢宇">
   <meta name="keywords" content="">
   
-    <meta name="description" content="视频抓取下载支持网站&#x2F;资源类型 you-get通过pip3 install you-get将依赖下载到本地 you-get是一个小型的命令行工具，可以从网络中获取视频&#x2F;音频&#x2F;图像 下载视频通过you-get [url]的命令可以将视频&#x2F;音频&#x2F;图像下载到当前命令行所在的目录 而you-get -i [url]，加上-i之后就可以查看所有能可用的质量和">
+    <meta name="description" content="面对并发问题的时候，我们应该始终优先考虑使用channel，如果channel解决不了，不得不使用共享内存的方式来实现并发编程的，那就是Golang中的锁机制 在Golang的sync包中，有两个很重要的锁类型  Mutex——互斥锁 RWMutex——读写锁  互斥锁：Mutex使用互斥锁是为了保护一个资源不会因为并发操作而引起冲突导致数据不准确 当有多个协程对一个不具备原子性的过程进行处理的时">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python--视频下载及转换">
-<meta property="og:url" content="https://www.zhyblog.top/2022/12/15/Python-%E8%A7%86%E9%A2%91%E4%B8%8B%E8%BD%BD%E5%8F%8A%E8%BD%AC%E6%8D%A2/index.html">
+<meta property="og:title" content="go协程--互斥锁和读写锁">
+<meta property="og:url" content="https://www.zhyblog.top/2022/12/19/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%8D%8F%E7%A8%8B-%E4%BA%92%E6%96%A5%E9%94%81%E5%92%8C%E8%AF%BB%E5%86%99%E9%94%81/index.html">
 <meta property="og:site_name" content="ZHY &amp; blog">
-<meta property="og:description" content="视频抓取下载支持网站&#x2F;资源类型 you-get通过pip3 install you-get将依赖下载到本地 you-get是一个小型的命令行工具，可以从网络中获取视频&#x2F;音频&#x2F;图像 下载视频通过you-get [url]的命令可以将视频&#x2F;音频&#x2F;图像下载到当前命令行所在的目录 而you-get -i [url]，加上-i之后就可以查看所有能可用的质量和">
+<meta property="og:description" content="面对并发问题的时候，我们应该始终优先考虑使用channel，如果channel解决不了，不得不使用共享内存的方式来实现并发编程的，那就是Golang中的锁机制 在Golang的sync包中，有两个很重要的锁类型  Mutex——互斥锁 RWMutex——读写锁  互斥锁：Mutex使用互斥锁是为了保护一个资源不会因为并发操作而引起冲突导致数据不准确 当有多个协程对一个不具备原子性的过程进行处理的时">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-12-15T05:26:15.000Z">
-<meta property="article:modified_time" content="2022-12-15T08:02:50.166Z">
+<meta property="article:published_time" content="2022-12-19T14:45:00.000Z">
+<meta property="article:modified_time" content="2022-12-19T15:53:00.523Z">
 <meta property="article:author" content="张颢宇">
-<meta property="article:tag" content="Python">
+<meta property="article:tag" content="go协程">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Python--视频下载及转换 - ZHY &amp; blog</title>
+  <title>go协程--互斥锁和读写锁 - ZHY &amp; blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -197,7 +197,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Python--视频下载及转换"></span>
+            <span id="subtitle" data-typed-text="go协程--互斥锁和读写锁"></span>
           
         </div>
 
@@ -208,8 +208,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-12-15 13:26" pubdate>
-          2022年12月15日 下午
+        <time datetime="2022-12-19 22:45" pubdate>
+          2022年12月19日 晚上
         </time>
       </span>
     
@@ -220,7 +220,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          2k 字
         
       </span>
     
@@ -231,7 +231,7 @@
         
         
         
-          10 分钟
+          17 分钟
         
       </span>
     
@@ -269,31 +269,47 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Python--视频下载及转换</h1>
+            <h1 style="display: none">go协程--互斥锁和读写锁</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="视频抓取下载"><a href="#视频抓取下载" class="headerlink" title="视频抓取下载"></a>视频抓取下载</h1><p><a target="_blank" rel="noopener" href="https://you-get.org/#supported-sites">支持网站&#x2F;资源类型</a></p>
-<h2 id="you-get"><a href="#you-get" class="headerlink" title="you-get"></a>you-get</h2><p>通过<code>pip3 install you-get</code>将依赖下载到本地</p>
-<p>you-get是一个小型的命令行工具，可以从网络中获取视频&#x2F;音频&#x2F;图像</p>
-<h3 id="下载视频"><a href="#下载视频" class="headerlink" title="下载视频"></a>下载视频</h3><p>通过<code>you-get [url]</code>的命令可以将视频&#x2F;音频&#x2F;图像下载到当前命令行所在的目录</p>
-<p>而<code>you-get -i [url]</code>，加上<code>-i</code>之后就可以查看所有能可用的质量和格式</p>
-<h3 id="设置下载的路径"><a href="#设置下载的路径" class="headerlink" title="设置下载的路径"></a>设置下载的路径</h3><p>使用<code>-o</code>设置下载的目录</p>
-<p>使用<code>-0</code>设置下载的文件名</p>
-<h3 id="鉴权-x2F-视频"><a href="#鉴权-x2F-视频" class="headerlink" title="鉴权&#x2F;视频"></a>鉴权&#x2F;视频</h3><p>通过<code>-c</code>提供浏览器的Cookie确保能获取视频</p>
-<h3 id="拉取列表"><a href="#拉取列表" class="headerlink" title="拉取列表"></a>拉取列表</h3><p>使用<code>-u</code>查看所有能下载的url</p>
-<h3 id="Google搜索下载"><a href="#Google搜索下载" class="headerlink" title="Google搜索下载"></a>Google搜索下载</h3><p>可以使用<code>you-get [关键字]</code>在google浏览器上进行搜索然后下载，当然这种方式很随意</p>
-<h1 id="视频转音频"><a href="#视频转音频" class="headerlink" title="视频转音频"></a>视频转音频</h1><h2 id="os-walk"><a href="#os-walk" class="headerlink" title="os.walk()"></a><code>os.walk()</code></h2><p>使用<code>os.walk()</code>来深度遍历文件</p>
-<p>在python中，<code>os.walk()</code>调用方法为：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">walk</span>(<span class="hljs-params">top, topdown=<span class="hljs-literal">True</span>, onerror=<span class="hljs-literal">None</span>, followlinks=<span class="hljs-literal">False</span></span>):<br></code></pre></td></tr></table></figure>
-
+                <p>面对并发问题的时候，我们应该始终优先考虑使用channel，如果channel解决不了，不得不使用共享内存的方式来实现并发编程的，那就是Golang中的锁机制</p>
+<p>在Golang的sync包中，有两个很重要的锁类型</p>
 <ul>
-<li>top也就是文件的根目录</li>
-<li>topdown为True时，由外向里遍历，否则由里向外</li>
-<li>followlinks是快捷方式所在的原目录</li>
+<li><code>Mutex</code>——互斥锁</li>
+<li><code>RWMutex</code>——读写锁</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">import</span> glob<br><span class="hljs-keyword">from</span> pydub <span class="hljs-keyword">import</span> AudioSegment<br><br>wenjianjia = []<br>path = <span class="hljs-string">&quot;/Users/zhanghaoyu/Desktop/video&quot;</span>         <span class="hljs-comment"># input(&#x27;请输入要转码的父文件夹路径：&#x27;)</span><br><span class="hljs-keyword">for</span> root, dirs, files <span class="hljs-keyword">in</span> os.walk(path):         <span class="hljs-comment"># 文件夹目录、目录列表、文件列表</span><br>    wenjianjia.append(root)<br>wjj = wenjianjia<br><br><span class="hljs-keyword">for</span> <span class="hljs-built_in">dir</span> <span class="hljs-keyword">in</span> wjj:<br>    video_dir = <span class="hljs-built_in">dir</span><br>    extension_list = (<span class="hljs-string">&#x27;*.mp4&#x27;</span>, <span class="hljs-string">&#x27;*.flv&#x27;</span>)<br>    i = <span class="hljs-number">1</span><br><br>    os.chdir(video_dir)     <span class="hljs-comment"># 改变当前路径</span><br>    <span class="hljs-keyword">for</span> extension <span class="hljs-keyword">in</span> extension_list:<br>        <span class="hljs-keyword">for</span> video <span class="hljs-keyword">in</span> glob.glob(extension):      <span class="hljs-comment"># 匹配后缀</span><br>            mp3_filename = os.path.splitext(os.path.basename(video))[<span class="hljs-number">0</span>] + <span class="hljs-string">&#x27;.mp3&#x27;</span><br>            AudioSegment.from_file(video).export(mp3_filename, <span class="hljs-built_in">format</span>=<span class="hljs-string">&#x27;mp3&#x27;</span>)<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;已转码&#x27;</span>, <span class="hljs-built_in">str</span>(i), <span class="hljs-string">&#x27;个视频！&#x27;</span>)<br>            i += <span class="hljs-number">1</span><br>            os.remove(video)        <span class="hljs-comment"># 删除原来的视频</span><br></code></pre></td></tr></table></figure>
+<h1 id="互斥锁：Mutex"><a href="#互斥锁：Mutex" class="headerlink" title="互斥锁：Mutex"></a>互斥锁：Mutex</h1><p>使用互斥锁是为了保护一个资源不会因为并发操作而引起冲突导致数据不准确</p>
+<p>当有多个协程对一个不具备原子性的过程进行处理的时候，如果不加上锁机制，会导致冲突从而导致数据不准确</p>
+<h2 id="Mutex锁定义方法"><a href="#Mutex锁定义方法" class="headerlink" title="Mutex锁定义方法"></a>Mutex锁定义方法</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// 第一种</span><br><span class="hljs-keyword">var</span> lock *sync.Mutex<br>lock = <span class="hljs-built_in">new</span>(sync.Mutex)<br><br><span class="hljs-comment">// 第二种</span><br>lock := &amp;sync.Mutex&#123;&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;sync&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">add</span><span class="hljs-params">(count *<span class="hljs-type">int</span>, wg *sync.WaitGroup, lock *sync.Mutex)</span></span> &#123;<br>	<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000</span>; i++ &#123;<br>		<span class="hljs-comment">// 加锁</span><br>		lock.Lock()<br>		*count = *count + <span class="hljs-number">1</span><br>		<span class="hljs-comment">// 解锁</span><br>		lock.Unlock()<br>	&#125;<br>	wg.Done()<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	<span class="hljs-keyword">var</span> wg sync.WaitGroup<br>	lock := &amp;sync.Mutex&#123;&#125;<br>	count := <span class="hljs-number">0</span><br><br>	<span class="hljs-comment">// WaitGroup</span><br>	wg.Add(<span class="hljs-number">3</span>)<br><br>	<span class="hljs-keyword">go</span> add(&amp;count, &amp;wg, lock)<br>	<span class="hljs-keyword">go</span> add(&amp;count, &amp;wg, lock)<br>	<span class="hljs-keyword">go</span> add(&amp;count, &amp;wg, lock)<br><br>	wg.Wait()<br>	fmt.Println(<span class="hljs-string">&quot;count的值为&quot;</span>, count)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意</p>
+</blockquote>
+<ul>
+<li>同一协程里面，不要在尚未解锁时再次使用加锁</li>
+<li>同一协程里面，不要对已解锁的锁再次解锁</li>
+<li>加了锁后，要解锁，必要时使用defer</li>
+</ul>
+<h1 id="读写锁：RWMutex"><a href="#读写锁：RWMutex" class="headerlink" title="读写锁：RWMutex"></a>读写锁：RWMutex</h1><p>限于Mutex同一时刻只能有一个线程执行，在某些情况下，效率非常低，于是就有了RWMutex，<strong>将程序对资源的访问分为读操作和写操作</strong>：</p>
+<ul>
+<li>为了保证数据的安全，规定当有人还在读取数据（即读锁占用）时，不允许有人更新这个数据（即写锁会阻塞）</li>
+<li>为了保证程序的效率，多个人（线程）读取数据（拥有读锁）时，互不影响不会造成阻塞，不会像Mutex那样只允许有一个人（线程）读取同一个数据</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// 第一种</span><br><span class="hljs-keyword">var</span> lock *sync.RWMutex<br>lock = <span class="hljs-built_in">new</span>(sync.RWMutex)<br><br><span class="hljs-comment">// 第二种</span><br>lock := &amp;sync.RWMutex&#123;&#125;<br></code></pre></td></tr></table></figure>
+
+<p>提供了两种锁，每种锁对应两个方法，为了避免死锁，两个方法要成对出现，必要时请使用defer</p>
+<ul>
+<li>读锁：调用Rlock开启锁，调用RUnlock释放锁</li>
+<li>写锁：调用Lock方法开启锁，调用Unlock释放锁（和Mutex类似）</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;sync&quot;</span><br>	<span class="hljs-string">&quot;time&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	lock := &amp;sync.RWMutex&#123;&#125;<br>	<span class="hljs-comment">// 写锁</span><br>	lock.Lock()<br><br>	<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">4</span>; i++ &#123;<br>		<span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(i <span class="hljs-type">int</span>)</span></span> &#123;<br>			fmt.Printf(<span class="hljs-string">&quot;第 %d 个协程准备开始.. \n&quot;</span>, i)<br>			<span class="hljs-comment">// 读锁</span><br>			lock.RLock()<br>			fmt.Printf(<span class="hljs-string">&quot;第 %d 个协程获得读锁, sleep 1s 后，释放锁\n&quot;</span>, i)<br>			time.Sleep(time.Second)<br>			lock.RUnlock()<br>		&#125;(i)<br>	&#125;<br><br>	time.Sleep(<span class="hljs-number">2</span> * time.Second)<br><br>	fmt.Println(<span class="hljs-string">&quot;准备释放写锁，读锁不再堵塞&quot;</span>)<br>	<span class="hljs-comment">// 写锁一释放，读锁就自由了</span><br>	lock.Unlock()<br><br>	<span class="hljs-comment">// 由于会等到读锁全部释放，才能获得写锁</span><br>	<span class="hljs-comment">// 因为这里一定会在上面4个协程全部完成才能往下走</span><br>	lock.Lock()<br>	fmt.Println(<span class="hljs-string">&quot;程序退出...&quot;</span>)<br>	lock.Unlock()<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs go">第 <span class="hljs-number">2</span> 个协程准备开始.. <br>第 <span class="hljs-number">0</span> 个协程准备开始.. <br>第 <span class="hljs-number">1</span> 个协程准备开始.. <br>第 <span class="hljs-number">3</span> 个协程准备开始.. <br>准备释放写锁，读锁不再堵塞<br>第 <span class="hljs-number">0</span> 个协程获得读锁, sleep <span class="hljs-number">1</span>s 后，释放锁<br>第 <span class="hljs-number">1</span> 个协程获得读锁, sleep <span class="hljs-number">1</span>s 后，释放锁<br>第 <span class="hljs-number">3</span> 个协程获得读锁, sleep <span class="hljs-number">1</span>s 后，释放锁<br>第 <span class="hljs-number">2</span> 个协程获得读锁, sleep <span class="hljs-number">1</span>s 后，释放锁<br>程序退出...<br></code></pre></td></tr></table></figure>
 
 
                 
@@ -313,7 +329,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Python/" class="category-chain-item">Python</a>
+  <a href="/categories/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/" class="category-chain-item">go基础回顾</a>
   
   
 
@@ -328,7 +344,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Python/">#Python</a>
+        <a href="/tags/go%E5%8D%8F%E7%A8%8B/">#go协程</a>
       
     </div>
   
@@ -340,8 +356,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Python--视频下载及转换</div>
-      <div>https://www.zhyblog.top/2022/12/15/Python-视频下载及转换/</div>
+      <div>go协程--互斥锁和读写锁</div>
+      <div>https://www.zhyblog.top/2022/12/19/go基础回顾/go协程-互斥锁和读写锁/</div>
     </div>
     <div class="license-meta">
       
@@ -353,7 +369,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年12月15日</div>
+          <div>2022年12月19日</div>
         </div>
       
       
@@ -385,18 +401,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/12/19/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%8D%8F%E7%A8%8B-goroutine/" title="go协程--goroutine">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">go协程--goroutine</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/12/14/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE-%E6%96%B9%E6%B3%95/" title="go基础回顾--方法">
-                        <span class="hidden-mobile">go基础回顾--方法</span>
+                      <a href="/2022/12/19/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%8D%8F%E7%A8%8B-WaitGroup/" title="go协程--WaitGroup">
+                        <span class="hidden-mobile">go协程--WaitGroup</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

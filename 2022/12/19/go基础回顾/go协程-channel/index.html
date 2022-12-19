@@ -1,0 +1,723 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/avatar.png">
+  <link rel="icon" href="/img/avatar.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="张颢宇">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="上篇介绍了goroutine，它是Go语言程序的并发体的话，那么channel（信道）就是它们之间的通信机制，也就是可以让一个goroutine和另一个goroutine传输信息的通道，也就是信道 channel，就是一个管道，连接了多个goroutine程序，是一种队列式的数据结构，遵循先入先出的规则 定义、使用channel每个channel只能传递一种数据类型的数据，所以在声明的时候，要指定">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go协程--channel">
+<meta property="og:url" content="https://www.zhyblog.top/2022/12/19/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%8D%8F%E7%A8%8B-channel/index.html">
+<meta property="og:site_name" content="ZHY &amp; blog">
+<meta property="og:description" content="上篇介绍了goroutine，它是Go语言程序的并发体的话，那么channel（信道）就是它们之间的通信机制，也就是可以让一个goroutine和另一个goroutine传输信息的通道，也就是信道 channel，就是一个管道，连接了多个goroutine程序，是一种队列式的数据结构，遵循先入先出的规则 定义、使用channel每个channel只能传递一种数据类型的数据，所以在声明的时候，要指定">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-12-19T11:29:42.000Z">
+<meta property="article:modified_time" content="2022-12-19T13:02:28.402Z">
+<meta property="article:author" content="张颢宇">
+<meta property="article:tag" content="go协程">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>go协程--channel - ZHY &amp; blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.zhyblog.top","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ZHY</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="go协程--channel"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-12-19 19:29" pubdate>
+          2022年12月19日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">go协程--channel</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>上篇介绍了<code>goroutine</code>，它是Go语言程序的并发体的话，那么<code>channel</code>（信道）就是它们之间的通信机制，也就是可以让一个<code>goroutine</code>和另一个<code>goroutine</code>传输信息的通道，也就是信道</p>
+<p><code>channel</code>，就是一个管道，连接了多个goroutine程序，是一种队列式的数据结构，遵循先入先出的规则</p>
+<h1 id="定义、使用channel"><a href="#定义、使用channel" class="headerlink" title="定义、使用channel"></a>定义、使用channel</h1><p>每个channel只能传递一种数据类型的数据，所以在声明的时候，要指定数据类型：</p>
+<p><code>var 信道实例 chan 信道类型</code></p>
+<p>声明后的默认值为<code>nil</code>，必须使用<code>make</code>函数进行初始化：</p>
+<p><code>信道实例 = make(chan 信道类型)</code></p>
+<p>或者直接就是:</p>
+<p><code>信道实例 := make(chan 信道类型)</code></p>
+<p>假如我要定义一个传输int类型的信道，可以这样写：</p>
+<p><code>pipline := make(chan int)</code></p>
+<p>定义好了信道之后，<strong>对信道中的数据操作也就是发送和读取数据</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// 定义channel</span><br>pipline := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)<br><br><span class="hljs-comment">// 向channel中发送数据</span><br>pipline&lt;- <span class="hljs-number">200</span><br><br><span class="hljs-comment">// 从信道中取出数据，将数据赋值给mydate</span><br>mydate := &lt;-pipline<br></code></pre></td></tr></table></figure>
+
+<p>信道用完了之后，<strong>就可以对信道进行关闭，避免有人一直等待</strong>，<strong>但是关闭了信道之后，接收方依然可以从信道中读取到数据，只不过接收到的永远是0</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-built_in">close</span>(pipline)<br></code></pre></td></tr></table></figure>
+
+<p><strong>如何判断一个channel是否已经被关闭？</strong></p>
+<p>当从信道中读取数据时，可以有多个返回值，第二个返回值能够表示信道是否已经被关闭，如果关闭了就是<code>false</code>，没有关闭就是<code>true</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go">x, ok := &lt;-pipline<br></code></pre></td></tr></table></figure>
+
+<h2 id="channel的容量和长度"><a href="#channel的容量和长度" class="headerlink" title="channel的容量和长度"></a>channel的容量和长度</h2><p>通过<code>make</code>函数可以指定信道的容量（可以缓存的数据），不填的话默认为0：</p>
+<ul>
+<li>当容量为0时，channel中不能存放数据，发送数据时，要求必须立马有人接收，这种channel被称为<strong>无缓冲channel</strong></li>
+<li>当容量为1时，只能存放一个数据，再向里面发送数据时，会造成程序堵塞（<strong>利用这一点可以使用信道来做锁</strong>）</li>
+<li>当容量大于1时，channel中能存放多个数据，可以用于多个协程之间的通信管道，共享资源</li>
+</ul>
+<p><strong>可以使用cap来获取容量，使用len来获取长度</strong></p>
+<h1 id="缓冲channel和无缓冲channel"><a href="#缓冲channel和无缓冲channel" class="headerlink" title="缓冲channel和无缓冲channel"></a>缓冲channel和无缓冲channel</h1><ul>
+<li>缓冲channel</li>
+</ul>
+<p>​		发送端和接收端可以处于<strong>异步状态</strong></p>
+<ul>
+<li><p>无缓冲channel</p>
+<p>接收端必须先于发送端准备好，确保可以立马接收数据，否则发送端会阻塞，即必须处于<strong>同步状态</strong></p>
+</li>
+</ul>
+<h1 id="双向channel和单向channel"><a href="#双向channel和单向channel" class="headerlink" title="双向channel和单向channel"></a>双向channel和单向channel</h1><p>一般情况下，我们定义的channel都是双向的，但是当我们想要对channel的数据流向做一些控制的时候，就会去定义单向的channel</p>
+<ul>
+<li><p>双向channel</p>
+<p>默认情况下定义的信道都是双向的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;time&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	pipline := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)<br><br>	<span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>		fmt.Println(<span class="hljs-string">&quot;准备发送数据100：&quot;</span>)<br>		pipline &lt;- <span class="hljs-number">100</span><br>	&#125;()<br><br>	<span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>		number := &lt;-pipline<br>		fmt.Printf(<span class="hljs-string">&quot;接收到的数据是%d&quot;</span>, number)<br>	&#125;()<br>	time.Sleep(time.Second)<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>单向channel</p>
+<ul>
+<li><p>只读channel</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> pipline = <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)<br><span class="hljs-keyword">type</span> Receiver = &lt;-<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>		<span class="hljs-comment">// 定义类型别名</span><br><span class="hljs-keyword">var</span> receiver Receiver = pipline<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>只写channel</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> pipline = <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)<br><span class="hljs-keyword">type</span> Sender = <span class="hljs-keyword">chan</span>&lt;- <span class="hljs-type">int</span><br>ver sender Sender = pipline<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;time&quot;</span><br>)<br><br><span class="hljs-comment">// 定义只读channel</span><br><span class="hljs-keyword">type</span> Receiver = &lt;-<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span><br><br><span class="hljs-comment">// 定义只写channel</span><br><span class="hljs-keyword">type</span> Sender = <span class="hljs-keyword">chan</span>&lt;- <span class="hljs-type">int</span><br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	pipline := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)<br><br>	<span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>		<span class="hljs-keyword">var</span> sender Sender = pipline<br>		fmt.Println(<span class="hljs-string">&quot;准备发送数据：100&quot;</span>)<br>		sender &lt;- <span class="hljs-number">100</span><br>	&#125;()<br><br>	<span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>		<span class="hljs-keyword">var</span> receiver Receiver = pipline<br>		num := &lt;-receiver<br>		fmt.Printf(<span class="hljs-string">&quot;准备接收数据：%d&quot;</span>, num)<br>	&#125;()<br><br>	time.Sleep(time.Second)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="遍历channel"><a href="#遍历channel" class="headerlink" title="遍历channel"></a>遍历channel</h1><p>可以使用<code>for range</code>进行遍历，前提是确保信道处于关闭状态，否则循环会阻塞：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span><br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">fibonacci</span><span class="hljs-params">(mychan <span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>)</span></span> &#123;<br>	n := <span class="hljs-built_in">cap</span>(mychan)<br><br>	x, y := <span class="hljs-number">1</span>, <span class="hljs-number">1</span><br>	<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; n; i++ &#123;<br>		mychan &lt;- x<br>		x, y = y, x+y<br>	&#125;<br>	<span class="hljs-comment">// close channel</span><br>	<span class="hljs-built_in">close</span>(mychan)<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	pipline := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">int</span>, <span class="hljs-number">10</span>)<br><br>	<span class="hljs-keyword">go</span> fibonacci(pipline)<br><br>	<span class="hljs-keyword">for</span> k := <span class="hljs-keyword">range</span> pipline &#123;<br>		fmt.Println(k)<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="用channel来做锁"><a href="#用channel来做锁" class="headerlink" title="用channel来做锁"></a>用channel来做锁</h1><p>利用阻塞程序的性质可以用来当程序的锁</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;fmt&quot;</span><br>	<span class="hljs-string">&quot;time&quot;</span><br>)<br><br><span class="hljs-comment">// x = x + 1不是原子操作</span><br><span class="hljs-comment">// 应该避免多个协程对其进行操作</span><br><br><span class="hljs-comment">// 使用cap为1的channel能够达到锁的操作</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">increment</span><span class="hljs-params">(ch <span class="hljs-keyword">chan</span> <span class="hljs-type">bool</span>, x *<span class="hljs-type">int</span>)</span></span> &#123;<br>	ch &lt;- <span class="hljs-literal">true</span><br>	*x = *x + <span class="hljs-number">1</span><br>	&lt;-ch<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	<span class="hljs-comment">// 注意要设置cap为1的channel</span><br>	pipline := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">bool</span>, <span class="hljs-number">1</span>)<br><br>	<span class="hljs-keyword">var</span> x <span class="hljs-type">int</span><br>	<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000</span>; i++ &#123;<br>		<span class="hljs-keyword">go</span> increment(pipline, &amp;x)<br>	&#125;<br>	<span class="hljs-comment">// 确保channel正常执行完</span><br>	time.Sleep(time.Second)<br>	fmt.Println(<span class="hljs-string">&quot;x的值为&quot;</span>, x)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如果不加锁的话，输出就会小于1000</p>
+<h1 id="channel传递是深拷贝吗？"><a href="#channel传递是深拷贝吗？" class="headerlink" title="channel传递是深拷贝吗？"></a>channel传递是深拷贝吗？</h1><p>在Go中，数据结构可以分为：</p>
+<ul>
+<li>值类型：int，string，float，bool，array，struct</li>
+<li>引用类型：slice，map</li>
+</ul>
+<p><strong>如果传入的类型是值类型，就是浅拷贝；如果是引用类型，就是深拷贝</strong></p>
+<blockquote>
+<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><ul>
+<li>关闭一个为初始化的channel会panic</li>
+<li>重复关闭channel会panic</li>
+<li>向关闭的channel发送消息会panic</li>
+<li>close后的channel中读取消息不会堵塞，并且会返回一个false的值来表示关闭状态</li>
+<li>close channel会产生广播机制</li>
+<li>channel是线程安全的</li>
+</ul>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/" class="category-chain-item">go基础回顾</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/go%E5%8D%8F%E7%A8%8B/">#go协程</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>go协程--channel</div>
+      <div>https://www.zhyblog.top/2022/12/19/go基础回顾/go协程-channel/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>张颢宇</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年12月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/12/19/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%8D%8F%E7%A8%8B-WaitGroup/" title="go协程--WaitGroup">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">go协程--WaitGroup</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/12/19/go%E5%9F%BA%E7%A1%80%E5%9B%9E%E9%A1%BE/go%E5%8D%8F%E7%A8%8B-goroutine/" title="go协程--goroutine">
+                        <span class="hidden-mobile">go协程--goroutine</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
