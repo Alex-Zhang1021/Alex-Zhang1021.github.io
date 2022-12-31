@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>python爬虫</title>
+    <link href="/2022/12/28/python%E7%88%AC%E8%99%AB/"/>
+    <url>/2022/12/28/python%E7%88%AC%E8%99%AB/</url>
+    
+    <content type="html"><![CDATA[<ul><li><code>requests</code>模块</li><li>数据解析<ul><li><code>bs4</code>模块</li><li>正则表达式</li><li><code>xpath</code></li></ul></li><li>反爬机制<ul><li><code>UA</code>识别 –&gt; <code>UA</code>伪装</li><li>动态数据加载<ul><li><code>Ajax</code></li><li><code>JS</code></li><li>伪标签</li></ul></li><li><code>Cookie</code>机制</li><li><code>IP</code>高频请求封禁 –&gt; 代理IP（透明、匿名、高匿）</li></ul></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>Python爬虫</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>爬虫</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>go-基于TCP协议自定义应用层协议</title>
     <link href="/2022/12/20/TCP%E6%9C%8D%E5%8A%A1%E5%99%A8/go-%E5%9F%BA%E4%BA%8ETCP%E5%8D%8F%E8%AE%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE/"/>
     <url>/2022/12/20/TCP%E6%9C%8D%E5%8A%A1%E5%99%A8/go-%E5%9F%BA%E4%BA%8ETCP%E5%8D%8F%E8%AE%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE/</url>
